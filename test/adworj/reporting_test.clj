@@ -14,6 +14,13 @@
                                :range (r/date-range start-day end-day))]
     (is (= ReportDefinitionDateRangeType/CUSTOM_DATE (.getDateRangeType d)))
     (is (= "20150101" (.. d getSelector getDateRange getMin)))
-    (is (= "20150102" (.. d getSelector getDateRange getMax))))
+    (is (= "20150102" (.. d getSelector getDateRange getMax)))
+    (is (= 15 (count (.. d getSelector getFields)))))
   (is (= ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT
-         (.getReportType (r/report-definition r/search-query "testing")))))
+         (.getReportType (r/report-definition r/search-query "testing"))))
+  (is (false? (.isIncludeZeroImpressions (r/report-definition r/search-query "testing")))))
+
+
+(deftest report-field-names-test
+  (is (= 15 (count (r/selected-field-names r/search-query))))
+  (is (= "AdGroupName" (first (r/selected-field-names r/search-query)))))

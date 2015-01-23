@@ -1,9 +1,15 @@
 (ns adworj.reporting
   (:require [clj-time.format :as tf]
-            [clj-time.core :as tc])
+            [clj-time.core :as tc]
+            [adworj.credentials :as ac])
   (:import [com.google.api.ads.adwords.lib.jaxb.v201409 ReportDefinition ReportDefinitionReportType]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DownloadFormat]
-           [com.google.api.ads.adwords.lib.jaxb.v201409 DateRange Selector ReportDefinitionDateRangeType]))
+           [com.google.api.ads.adwords.lib.jaxb.v201409 DateRange Selector ReportDefinitionDateRangeType]
+           [com.google.api.ads.adwords.lib.client AdWordsSession]
+           [com.google.api.ads.adwords.lib.client.reporting ReportingConfiguration$Builder]
+           [com.google.api.client.auth.oauth2 Credential]
+           [com.google.api.ads.adwords.lib.utils.v201409 ReportDownloader DetailedReportDownloadResponseException]
+           [java.util.zip GZIPInputStream]))
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
 
@@ -33,26 +39,37 @@
     :min  (tf/unparse adwords-date-format start)
     :max  (tf/unparse adwords-date-format end)}))
 
+(defn selected-field-names [report & fields]
+  (let [mappings (:field-mappings report)
+        selected (or fields (keys mappings))]
+    (map (partial get mappings) selected)))
+
 (defn- selector []
   (Selector. ))
 
-(defn report-definition [{:keys [type] :as report} name & {:keys [range]
-                                                           :or   {range (date-range :yesterday)}}]
-  (let [definition (doto (ReportDefinition. )
-                     (.setReportName name)
-                     (.setReportType type)
-                     (.setDownloadFormat DownloadFormat/GZIPPED_CSV))
-        {:keys [type min max]} range
-        sel        (selector)]
-    (if (= type ReportDefinitionDateRangeType/CUSTOM_DATE)
+(defn zero-impressionable? [^ReportDefinitionReportType report-type]
+  (cond (= ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT report-type) false
+        :default true))
+
+(defn report-definition [report name & {:keys [range selected-fields]
+                                        :or   {range (date-range :yesterday)}}]
+  (let [definition             (doto (ReportDefinition. )
+                                 (.setReportName name)
+                                 (.setReportType (:type report))
+                                 (.setDownloadFormat DownloadFormat/GZIPPED_CSV))
+        {:keys [min max]} range
+        sel                    (Selector. )]
+    (if (= (:type range) ReportDefinitionDateRangeType/CUSTOM_DATE)
       (let [dr (doto (DateRange. )
                  (.setMax max)
                  (.setMin min))]
-        (.setDateRangeType definition type)
+        (.setDateRangeType definition (:type range))
         (.setDateRange sel dr))
-      (.setDateRangeType definition type))
-    (.setSelector definition sel)
-    definition))
+      (.setDateRangeType definition (:type range)))
+    (.. sel getFields (addAll (apply selected-field-names report selected-fields)))
+    (doto definition
+      (.setIncludeZeroImpressions (zero-impressionable? (:type report)))
+      (.setSelector sel))))
 
 (defn report [type & field-mappings]
   (Report. type (apply array-map field-mappings)))
@@ -76,3 +93,33 @@
   :device                "Device"
   :impressions           "Impressions"
   :query                 "Query")
+
+
+
+
+
+(defn configure-session-for-reporting
+  "optimizes session configuration for reporting."
+  [^AdWordsSession adwords-session]
+  (.setReportingConfiguration adwords-session
+                              (-> (ReportingConfiguration$Builder. )
+                                  (.skipReportHeader true)
+                                  (.skipReportSummary true)
+                                  (.build))))
+
+(defn reporting-session
+  "creates an adwords session optimized for reporting. opts are those accepted
+  by credentials/adwords-session."
+  [config-file ^Credential credential & opts]
+  (doto (apply ac/adwords-session config-file credential opts)
+    (configure-session-for-reporting)))
+
+
+(defn report-stream
+  "provides uncompressed access to the stream of report data. returns an input stream
+  that should be closed when finished.
+  adwords-session: optimally a reporting-session to avoid header + summary"
+  [adwords-session report-definition]
+  (let [downloader (ReportDownloader. adwords-session)
+        response   (.downloadReport downloader report-definition)]
+    (GZIPInputStream. (.getInputStream response))))
