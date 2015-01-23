@@ -23,6 +23,10 @@ The easiest way to configure Google's client library is via a properties file. T
     api.adwords.clientSecret=(from the developer console above)
     api.adwords.developerToken=(from the adwords console)
 
+Once you've authenticated you can add an entry for the refresh token:
+
+    api.adwords.refreshToken=(from oauth authentication/authorization flow)
+
 ## License
 
 Copyright &copy; 2015 uSwitch Limited.
