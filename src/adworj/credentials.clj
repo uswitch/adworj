@@ -71,16 +71,13 @@
        (.build)
        (.generateCredential))))
 
-(defn- with-client-customer [session-builder client-customer-id]
-  (when client-customer-id
-    (.withClientCustomerId session-builder client-customer-id)))
-
 (defn adwords-session [config-file ^Credential credential & {:keys [client-customer-id]}]
-  (-> (AdWordsSession$Builder. )
-      (.fromFile config-file)
-      (with-client-customer client-customer-id)
-      (.withOAuth2Credential credential)
-      (.build)))
+  (let [b (AdWordsSession$Builder. )]
+    (.fromFile b config-file)
+    (.withOAuth2Credential b credential)
+    (when client-customer-id
+      (.withClientCustomerId b client-customer-id))
+    (.build b)))
 
 
 (comment

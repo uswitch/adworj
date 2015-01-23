@@ -1,7 +1,9 @@
 (ns adworj.reporting
   (:require [clj-time.format :as tf]
             [clj-time.core :as tc]
-            [adworj.credentials :as ac])
+            [adworj.credentials :as ac]
+            [clojure.data.csv :as csv]
+            [clojure.java.io :as io])
   (:import [com.google.api.ads.adwords.lib.jaxb.v201409 ReportDefinition ReportDefinitionReportType]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DownloadFormat]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DateRange Selector ReportDefinitionDateRangeType]
@@ -12,7 +14,6 @@
            [java.util.zip GZIPInputStream]))
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
-
 
 (defrecord Report [type field-mappings])
 
@@ -94,7 +95,7 @@
   :impressions           "Impressions"
   :query                 "Query")
 
-
+(defn record-builder [selected-fields])
 
 
 
@@ -123,3 +124,34 @@
   (let [downloader (ReportDownloader. adwords-session)
         response   (.downloadReport downloader report-definition)]
     (GZIPInputStream. (.getInputStream response))))
+
+(defn records
+  "reads records from the input stream. returns a lazy sequence of
+  records. converts records into clojure maps with their attributes
+  as keywords.
+  e.g. (with-open [rdr (reader (report-stream ...))]
+         (doseq [rec (records reader search-query)]
+           ...
+    produces => {:ad-group-name ..."
+  [reader]
+  (let [records (csv/read-csv reader)
+        header  (first records)]
+    (map (fn [cells]
+           (apply array-map (interleave header cells)))
+         (rest records))))
+
+
+
+
+(defn save-to-file
+  "runs report and writes (uncompressed) csv data directly to out-file.
+  e.g.
+  (def session (reporting-session ...
+  (save-to-file session
+                (report-definition search-query \"searches\" :range (date-range :last-week))
+                \"out.csv\")"
+  [adwords-session report-definition out-file]
+  (let [is (report-stream adwords-session report-definition)]
+    (with-open [reader (io/reader is)]
+      (with-open [writer (io/writer out-file)]
+        (io/copy reader writer)))))

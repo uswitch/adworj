@@ -20,6 +20,9 @@
          (.getReportType (r/report-definition r/search-query "testing"))))
   (is (false? (.isIncludeZeroImpressions (r/report-definition r/search-query "testing")))))
 
+(deftest report-field-mapping-test
+  (is (= "AdGroupName"  (get-in r/search-query [:field-mappings :ad-group-name]) ))
+  (is (= :ad-group-name (get-in r/search-query [:reverse-mappings "AdGroupName"]))))
 
 (deftest report-field-names-test
   (is (= 15 (count (r/selected-field-names r/search-query))))
