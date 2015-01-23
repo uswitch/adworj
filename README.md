@@ -13,6 +13,8 @@ Google's APIs are moving towards requiring OAuth 2 authentication. To do this yo
 
 Once you've generated all the tokens and keys you can use `adworj.credentials` namespace to help generate the necessary credentials.
 
+Ultimately you need to retrieve the **refresh token** that is provided by the OAuth Credentials. Having retrieved this during the OAuth flow you can either create `offline-credentials` using the refresh token directly, or, store the refresh token in your `ads.properties`.
+
 ## ads.properties
 
 The easiest way to configure Google's client library is via a properties file. This should look something like:

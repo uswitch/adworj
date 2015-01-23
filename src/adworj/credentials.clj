@@ -2,6 +2,7 @@
   (:import [com.google.api.ads.common.lib.auth OfflineCredentials$Builder OfflineCredentials$Api]
            [com.google.api.ads.common.lib.auth GoogleClientSecretsBuilder GoogleClientSecretsBuilder$Api]
            [com.google.api.client.googleapis.auth.oauth2 GoogleCredential$Builder]
+           [com.google.api.client.auth.oauth2 Credential]
            [org.apache.commons.configuration Configuration BaseConfiguration]
            [com.google.api.client.http.javanet NetHttpTransport]
            [com.google.api.client.json.jackson2 JacksonFactory]
@@ -52,20 +53,29 @@
 (defn refresh-token [oauth-credentials]
   (.getRefreshToken oauth-credentials))
 
+(defn- adwords-credentials-builder []
+  (-> (OfflineCredentials$Builder.) (.forApi OfflineCredentials$Api/ADWORDS)))
+
 (defn offline-credentials
   "requires authentication configuration with client id, secret
   and a refresh token."
-  [config-file refresh-token]
-  (-> (OfflineCredentials$Builder. )
-      (.forApi OfflineCredentials$Api/ADWORDS)
-      (.fromFile config-file)
-      (.withRefreshToken refresh-token)
-      (.build)
-      (.generateCredential)))
+  ([config-file]
+   (-> (adwords-credentials-builder)
+       (.fromFile config-file)
+       (.build)
+       (.generateCredential)))
+  ([config-file refresh-token]
+   (-> (adwords-credentials-builder)
+       (.fromFile config-file)
+       (.withRefreshToken refresh-token)
+       (.build)
+       (.generateCredential))))
 
-(defn adwords-session [oauth-credentials]
+
+(defn adwords-session [config-file ^Credential credential]
   (-> (AdWordsSession$Builder. )
-      (.withOAuth2Credential oauth-credentials)
+      (.fromFile config-file)
+      (.withOAuth2Credential credential)
       (.build)))
 
 
