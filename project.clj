@@ -5,4 +5,6 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.google.api-ads/ads-lib "1.36.0"]
-                 [com.google.api-ads/adwords-axis "1.36.0"]])
+                 [com.google.api-ads/adwords-axis "1.36.0"]
+                 [clj-time "0.8.0"]
+                 [joda-time "2.6"]])
