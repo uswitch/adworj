@@ -27,6 +27,28 @@ Once you've authenticated you can add an entry for the refresh token:
 
     api.adwords.refreshToken=(from oauth authentication/authorization flow)
 
+# Reporting API
+
+Having successfully authenticated, and updated the properties file with your configuration, you can run a report as follows:
+
+```clojure
+(ns reporter
+  (:importer [adworj.credentials :as ac]
+             [adworj.reporting :as ar]
+             [clojure.java.io :as io]))
+
+(def client-customer-id "123-456-7890")
+(def credentials        (ac/offline-credentials "./ads.properties"))
+(def session            (ar/reporting-session "./ads.properties" credentials
+                                              :client-customer-id client-customer-id))
+
+(let [report-def (ar/report-definition ar/search-query "sample report"
+                                       :range (ar/date-range :last-week))]
+  (with-open [rdr (io/reader (report-stream session report-def))]
+    (doseq [record (records rdr)]
+      (println "Record: " record))))
+```
+
 ## License
 
 Copyright &copy; 2015 uSwitch Limited.
