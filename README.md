@@ -13,6 +13,14 @@ Google's APIs are moving towards requiring OAuth 2 authentication. To do this yo
 
 Once you've generated all the tokens and keys you can use `adworj.credentials` namespace to help generate the necessary credentials.
 
+## ads.properties
+
+The easiest way to configure Google's client library is via a properties file. This should look something like:
+
+    api.adwords.clientId=(from the developer console above)
+    api.adwords.clientSecret=(from the developer console above)
+    api.adwords.developerToken=(from the adwords console)
+
 ## License
 
 Copyright &copy; 2015 uSwitch Limited.
