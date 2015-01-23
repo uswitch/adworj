@@ -44,8 +44,8 @@ Having successfully authenticated, and updated the properties file with your con
 
 (let [report-def (ar/report-definition ar/search-query "sample report"
                                        :range (ar/date-range :last-week))]
-  (with-open [rdr (io/reader (report-stream session report-def))]
-    (doseq [record (records rdr)]
+  (with-open [rdr (io/reader (ar/report-stream session report-def))]
+    (doseq [record (ar/records rdr)]
       (println "Record: " record))))
 ```
 
