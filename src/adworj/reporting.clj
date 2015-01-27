@@ -611,7 +611,7 @@
          (doseq [rec (records reader search-query)]
            ...
     produces => {:ad-group-name ..."
-  [reader]
+  [reader report-def]
   (let [records (csv/read-csv reader)
         header  (first records)]
     (map (fn [cells]
