@@ -3,6 +3,7 @@
             [clj-time.core :as tc]
             [adworj.credentials :as ac]
             [clojure.data.csv :as csv]
+            [clojure.set :as set]
             [clojure.java.io :as io])
   (:import [com.google.api.ads.adwords.lib.jaxb.v201409 ReportDefinition ReportDefinitionReportType]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DownloadFormat]
@@ -40,10 +41,14 @@
     :min  (tf/unparse adwords-date-format start)
     :max  (tf/unparse adwords-date-format end)}))
 
-(defn selected-field-names [report & fields]
-  (let [mappings (:field-mappings report)
-        selected (or fields (keys mappings))]
-    (map (partial get mappings) selected)))
+(defn all-fields [report]
+  (keys (:field-mappings report)))
+
+(defn selected-field-names
+  [report & fields]
+  {:pre [(set/subset? (set fields) (set (all-fields report)))]}
+  (let [mappings (:field-mappings report)]
+    (map (partial get mappings) fields)))
 
 (defn- selector []
   (Selector. ))
@@ -54,8 +59,9 @@
     ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
     true))
 
-(defn report-definition [report name & {:keys [range selected-fields]
-                                        :or   {range (date-range :yesterday)}}]
+(defn report-specification [report name & {:keys [range selected-fields]
+                                           :or   {range           (date-range :yesterday)
+                                                  selected-fields (all-fields report)}}]
   (let [definition             (doto (ReportDefinition. )
                                  (.setReportName name)
                                  (.setReportType (:type report))
@@ -72,7 +78,9 @@
     (.. sel getFields (addAll (apply selected-field-names report selected-fields)))
     (doto definition
       (.setIncludeZeroImpressions (zero-impressionable? (:type report)))
-      (.setSelector sel))))
+      (.setSelector sel))
+    {:definition definition
+     :selected-fields selected-fields}))
 
 (defn report [type & field-mappings]
   (Report. type (apply array-map field-mappings)))
@@ -598,9 +606,9 @@
   "provides uncompressed access to the stream of report data. returns an input stream
   that should be closed when finished.
   adwords-session: optimally a reporting-session to avoid header + summary"
-  [adwords-session report-definition]
+  [adwords-session report-specification]
   (let [downloader (ReportDownloader. adwords-session)
-        response   (.downloadReport downloader report-definition)]
+        response   (.downloadReport downloader (:definition report-specification))]
     (GZIPInputStream. (.getInputStream response))))
 
 (defn records
@@ -608,14 +616,14 @@
   records. converts records into clojure maps with their attributes
   as keywords.
   e.g. (with-open [rdr (reader (report-stream ...))]
-         (doseq [rec (records reader search-query)]
+         (doseq [rec (records reader report-spec)]
            ...
-    produces => {:ad-group-name ..."
-  [reader report-def]
+    produces => [{:ad-group-name ..."
+  [reader report-spec]
   (let [records (csv/read-csv reader)
-        header  (first records)]
+        selected-fields (:selected-fields report-spec)]
     (map (fn [cells]
-           (apply array-map (interleave header cells)))
+           (apply array-map (interleave selected-fields cells)))
          (rest records))))
 
 
@@ -626,29 +634,29 @@
   e.g.
   (def session (reporting-session ...
   (save-to-file session
-                (report-definition search-query \"searches\" :range (date-range :last-week))
+                (report-specification search-query \"searches\" :range (date-range :last-week))
                 \"out.csv\")"
-  [adwords-session report-definition out-file]
-  (let [is (report-stream adwords-session report-definition)]
+  [adwords-session report-specification out-file]
+  (let [is (report-stream adwords-session (:definition report-specification))]
     (with-open [reader (io/reader is)]
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
 
-;; (let [report-def (ar/report-definition ar/paid-and-organic-query "sample report" :range (ar/date-range :last-week))
-;;       report (ar/make-report report-def)]
+;; (let [report-spec (ar/report-specification ar/paid-and-organic-query "sample report" :range (ar/date-range :last-week))
+;;       report (ar/make-report report-spec)]
 ;;   (with-open [rdr (report session)]
 ;;     (doseq [record (take 5 (.readRecords rdr))]
 ;;       (println "Record: " (pr-str record)))))
 
 (defprotocol RecordReader (readRecords [this]))
 
-(defn make-report [report-def]
+(defn make-report [report-spec]
   (fn [session]
-    (let [r (io/reader (report-stream session report-def))]
+    (let [r (io/reader (report-stream session report-spec))]
       (reify
         RecordReader
         (readRecords [this]
-          (records r report-def))
+          (records r report-spec))
         java.io.Closeable
         (close [this]
           (.close r))))))
