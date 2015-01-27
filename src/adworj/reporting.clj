@@ -78,6 +78,38 @@
 (defmacro defreport [name type & field-mappings]
   `(def ~name (report ~type ~@field-mappings)))
 
+(defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
+  :account-currency-code                 "AccountCurrencyCode"
+  :account-descriptive-name              "AccountDescriptiveName"
+  :account-time-zone-id                  "AccountTimeZoneId"
+  :ad-group-id                           "AdGroupId"
+  :ad-group-name                         "AdGroupName"
+  :average-cpc                           "AverageCpc"
+  :average-position                      "AveragePosition"
+  :campaign-id                           "CampaignId"
+  :campaign-name                         "CampaignName"
+  :clicks                                "Clicks"
+  :combined-ads-organic-clicks           "CombinedAdsOrganicClicks"
+  :combined-ads-organic-clicks-per-query "CombinedAdsOrganicClicksPerQuery"
+  :combined-ads-organic-queries          "CombinedAdsOrganicQueries"
+  :ctr                                   "Ctr"
+  :customer-descriptive-name             "CustomerDescriptiveName"
+  :date                                  "Date"
+  :external-customer-id                  "ExternalCustomerId"
+  :impressions                           "Impressions"
+  :keyword-id                            "KeywordId"
+  :keyword-text-matching-query           "KeywordTextMatchingQuery"
+  :match-type                            "MatchType"
+  :organic-average-position              "OrganicAveragePosition"
+  :organic-clicks                        "OrganicClicks"
+  :organic-clicks-per-query              "OrganicClicksPerQuery"
+  :organic-impressions                   "OrganicImpressions"
+  :organic-impressions-per-query         "OrganicImpressionsPerQuery"
+  :organic-queries                       "OrganicQueries"
+  :primary-company-name                  "PrimaryCompanyName"
+  :search-query                          "SearchQuery"
+  :serp-type                             "SerpType")
+
 (defreport search-query-performance ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT
   :account-currency-code               "AccountCurrencyCode"
   :account-descriptive-name            "AccountDescriptiveName"
