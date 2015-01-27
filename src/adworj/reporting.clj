@@ -485,6 +485,21 @@
   :week                                 "Week"
   :year                                 "Year")
 
+(defreport campaign-negative-keywords-performance ReportDefinitionReportType/CAMPAIGN_NEGATIVE_KEYWORDS_PERFORMANCE_REPORT
+  :account-currency-code                "AccountCurrencyCode"
+  :account-descriptive-name             "AccountDescriptiveName"
+  :account-time-zone-id                 "AccountTimeZoneId"
+  :campaign-id                          "CampaignId"
+  :customer-descriptive-name            "CustomerDescriptiveName"
+  :external-customer-id                 "ExternalCustomerId"
+  :id                                   "Id"
+  :is-negative                          "IsNegative"
+  :keyword-match-type                   "KeywordMatchType"
+  :keyword-text                         "KeywordText"
+  :placement-url                        "PlacementUrl"
+  :primary-company-name                 "PrimaryCompanyName"
+  :user-list-id                         "UserListId")
+
 
 (defn configure-session-for-reporting
   "optimizes session configuration for reporting."
