@@ -3,7 +3,8 @@
             [clj-time.core :as tc]
             [adworj.credentials :as ac]
             [clojure.data.csv :as csv]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.set :as set])
   (:import [com.google.api.ads.adwords.lib.jaxb.v201409 ReportDefinition ReportDefinitionReportType]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DownloadFormat]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DateRange Selector ReportDefinitionDateRangeType]
@@ -40,10 +41,15 @@
     :min  (tf/unparse adwords-date-format start)
     :max  (tf/unparse adwords-date-format end)}))
 
-(defn selected-field-names [report & fields]
-  (let [mappings (:field-mappings report)
-        selected (or fields (keys mappings))]
-    (map (partial get mappings) selected)))
+
+(defn all-fields [report]
+  (keys (:field-mappings report)))
+
+(defn selected-field-names
+  [report & fields]
+  {:pre [(set/subset? (set fields) (set (all-fields report)))]}
+  (let [mappings (:field-mappings report)]
+    (map (partial get mappings) fields)))
 
 (defn- selector []
   (Selector. ))
@@ -55,7 +61,8 @@
     true))
 
 (defn report-definition [report name & {:keys [range selected-fields]
-                                        :or   {range (date-range :yesterday)}}]
+                                        :or   {range           (date-range :yesterday)
+                                               selected-fields (all-fields report)}}]
   (let [definition             (doto (ReportDefinition. )
                                  (.setReportName name)
                                  (.setReportType (:type report))
@@ -594,6 +601,18 @@
     (configure-session-for-reporting)))
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 (defn report-stream
   "provides uncompressed access to the stream of report data. returns an input stream
   that should be closed when finished.
@@ -602,6 +621,12 @@
   (let [downloader (ReportDownloader. adwords-session)
         response   (.downloadReport downloader report-definition)]
     (GZIPInputStream. (.getInputStream response))))
+
+
+
+
+
+
 
 (defn records
   "reads records from the input stream. returns a lazy sequence of
@@ -617,6 +642,41 @@
     (map (fn [cells]
            (apply array-map (interleave header cells)))
          (rest records))))
+
+(defn run-report [args]
+  (Report. session report args))
+
+(defrecord Report [session report args]
+  (records []
+    (assoc this :report-stream (report-stream session ....))
+    (map (comp parse-csv translate-record)(:report-stream this)))
+  (.close []
+    (.close (:report-stream this))))
+
+
+(with-open [report (run-report session paid-and-organic-query
+                               "name" :range (date-range :last-week) :selected [:date :ctr])]
+  (doseq [r (records report)]
+    ))
+
+
+
+
+
+;; (with-open [r (report-reader session paid-and-organic-query
+;;                              "name" :range (date-range :last-week) :selected [:date :ctr])]
+;;   (with-open [rdr (r)]
+;;     (doseq [r (records rdr)])))
+
+
+;; (with-open [records (report-records session paid-and-organic-query
+;;                                     "name" :range (date-range :last-week) :selected [:date :ctr])]
+;;   (doseq [r records]))
+
+;; (doseq [r (report-records session paid-and-organic-query
+;;                           "name" :range (date-range :last-week) :selected [:date :ctr])])
+
+
 
 
 
