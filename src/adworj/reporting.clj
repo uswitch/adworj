@@ -49,8 +49,10 @@
   (Selector. ))
 
 (defn zero-impressionable? [^ReportDefinitionReportType report-type]
-  (cond (= ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT report-type) false
-        :default true))
+  (condp = report-type
+    ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT false
+    ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
+    true))
 
 (defn report-definition [report name & {:keys [range selected-fields]
                                         :or   {range (date-range :yesterday)}}]
