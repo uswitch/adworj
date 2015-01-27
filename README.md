@@ -33,7 +33,7 @@ Having successfully authenticated, and updated the properties file with your con
 
 ```clojure
 (ns reporter
-  (:importer [adworj.credentials :as ac]
+  (:require [adworj.credentials :as ac]
              [adworj.reporting :as ar]
              [clojure.java.io :as io]))
 
