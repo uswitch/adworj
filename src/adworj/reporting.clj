@@ -633,3 +633,22 @@
     (with-open [reader (io/reader is)]
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
+
+;; (let [report-def (ar/report-definition ar/paid-and-organic-query "sample report" :range (ar/date-range :last-week))
+;;       report (ar/make-report report-def)]
+;;   (with-open [rdr (report session)]
+;;     (doseq [record (take 5 (.readRecords rdr))]
+;;       (println "Record: " (pr-str record)))))
+
+(defprotocol RecordReader (readRecords [this]))
+
+(defn make-report [report-def]
+  (fn [session]
+    (let [r (io/reader (report-stream session report-def))]
+      (reify
+        RecordReader
+        (readRecords [this]
+          (records r report-def))
+        java.io.Closeable
+        (close [this]
+          (.close r))))))
