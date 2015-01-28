@@ -16,7 +16,18 @@
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
 
-(defrecord Report [type field-mappings])
+;; (defprotocol Runner
+;;   (run [session name & opts]))
+
+;; (defprotocol RecordReader (readRecords [this]))
+
+(defrecord ReportSpecification [type field-mappings]
+  ;; Runner
+  ;; (run [session name & {:keys [range selected-fields]
+  ;;                       :or   {range           (date-range :yesterday)
+  ;;                              selected-fields (keys field-mappings)}}]
+  ;;   ((make-report report name range selected-fields) session)))
+)
 
 (defn date-range
   "specify the date range for the report to cover. can be a set of predefined options,
@@ -78,17 +89,11 @@
       (.setIncludeZeroImpressions (zero-impressionable? (:type report)))
       (.setSelector sel))))
 
-(defn report-specification [report name & {:keys [range selected-fields]
-                                           :or   {range           (date-range :yesterday)
-                                                  selected-fields (all-fields report)}}]
-  {:definition (report-definition report name range selected-fields)
-   :selected-fields selected-fields})
-
-(defn report [type & field-mappings]
-  (Report. type (apply array-map field-mappings)))
+(defn report-specification [type & field-mappings]
+  (ReportSpecification. type (apply array-map field-mappings)))
 
 (defmacro defreport [name type & field-mappings]
-  `(def ~name (report ~type ~@field-mappings)))
+  `(def ~name (report-specification ~type ~@field-mappings)))
 
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
   :account-currency-code                 "AccountCurrencyCode"
@@ -640,24 +645,15 @@
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
 
-(defprotocol RecordReader (readRecords [this]))
 
-(defn make-report [report name range selected-fields]
-  (let [report-def (report-definition report name range selected-fields)]
-    (fn [session]
-      (let [r (io/reader (report-stream session report-def))]
-        (reify
-          RecordReader
-          (readRecords [this]
-            (records r selected-fields))
-          java.io.Closeable
-          (close [this]
-            (.close r)))))))
-
-(defmacro defreporter [reporter report]
-  `(defn ~reporter [name# & {:keys [range# selected-fields#]
-                   :or   {range#           (date-range :yesterday)
-                          selected-fields# (all-fields ~report)}}]
-     (make-report ~report name# range# selected-fields#)))
-
-(defreporter paid-and-organic-query-report paid-and-organic-query)
+;; (defn make-report [report name range selected-fields]
+;;   (let [report-def (report-definition report name range selected-fields)]
+;;     (fn [session]
+;;       (let [r (io/reader (report-stream session report-def))]
+;;         (reify
+;;           RecordReader
+;;           (readRecords [this]
+;;             (records r selected-fields))
+;;           java.io.Closeable
+;;           (close [this]
+;;             (.close r)))))))
