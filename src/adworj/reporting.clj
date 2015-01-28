@@ -16,18 +16,9 @@
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
 
-;; (defprotocol Runner
-;;   (run [session name & opts]))
+(defprotocol RecordReader (record-seq [this]))
 
-;; (defprotocol RecordReader (readRecords [this]))
-
-(defrecord ReportSpecification [type field-mappings]
-  ;; Runner
-  ;; (run [session name & {:keys [range selected-fields]
-  ;;                       :or   {range           (date-range :yesterday)
-  ;;                              selected-fields (keys field-mappings)}}]
-  ;;   ((make-report report name range selected-fields) session)))
-)
+(defrecord ReportSpecification [type field-mappings])
 
 (defn date-range
   "specify the date range for the report to cover. can be a set of predefined options,
@@ -52,6 +43,7 @@
     :min  (tf/unparse adwords-date-format start)
     :max  (tf/unparse adwords-date-format end)}))
 
+
 (defn all-fields [report]
   (keys (:field-mappings report)))
 
@@ -69,6 +61,7 @@
     ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT false
     ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
     true))
+
 
 (defn report-definition [report name range selected-fields]
   (let [definition             (doto (ReportDefinition. )
@@ -592,6 +585,7 @@
   :year                                 "Year")
 
 
+
 (defn configure-session-for-reporting
   "optimizes session configuration for reporting."
   [^AdWordsSession adwords-session]
@@ -637,23 +631,29 @@
   e.g.
   (def session (reporting-session ...
   (save-to-file session
-                (report-specification search-query \"searches\" :range (date-range :last-week))
+                (report-definition search-query \"searches\" :range (date-range :last-week))
                 \"out.csv\")"
-  [adwords-session report-specification out-file]
-  (let [is (report-stream adwords-session (:definition report-specification))]
+  [adwords-session report-definition out-file]
+  (let [is (report-stream adwords-session report-definition)]
     (with-open [reader (io/reader is)]
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
 
 
-;; (defn make-report [report name range selected-fields]
-;;   (let [report-def (report-definition report name range selected-fields)]
-;;     (fn [session]
-;;       (let [r (io/reader (report-stream session report-def))]
-;;         (reify
-;;           RecordReader
-;;           (readRecords [this]
-;;             (records r selected-fields))
-;;           java.io.Closeable
-;;           (close [this]
-;;             (.close r)))))))
+(defprotocol Runner
+  (run [session name & opts]))
+
+(extend-protocol Runner
+  ReportSpecification
+  (run [report session name & {:keys [range selected-fields]
+                             :or   {range           (date-range :yesterday)
+                                    selected-fields (:field-mappings report)}}]
+    (let [report-def (report-definition report name range selected-fields)
+          r (io/reader (report-stream session report-def))]
+      (reify
+        RecordReader
+        (record-seq [this]
+          (records r selected-fields))
+        java.io.Closeable
+        (close [this]
+          (.close r))))))
