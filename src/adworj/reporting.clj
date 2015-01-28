@@ -120,11 +120,11 @@
   :keyword-id                            "KeywordId"
   :keyword-text-matching-query           "KeywordTextMatchingQuery"
   :match-type                            "MatchType"
-  :organic-average-position              "OrganicAveragePosition"
+  :organic-average-position              {:name "OrganicAveragePosition" :parse parse-double}
   :organic-clicks                        {:name "OrganicClicks" :parse parse-long}
   :organic-clicks-per-query              {:name "OrganicClicksPerQuery" :parse parse-percentage}
   :organic-impressions                   {:name "OrganicImpressions" :parse parse-long}
-  :organic-impressions-per-query         {:name "OrganicImpressionsPerQuery" :parse parse-percentage}
+  :organic-impressions-per-query         {:name "OrganicImpressionsPerQuery" :parse parse-double}
   :organic-queries                       {:name "OrganicQueries" :parse parse-long}
   :primary-company-name                  "PrimaryCompanyName"
   :search-query                          "SearchQuery"
@@ -629,7 +629,8 @@
 
 (defn coerce-record [coercions m]
   (into m (for [[field coerce] coercions]
-            [field (coerce (field m))])))
+            (when-let [existing-value (field m)]
+              [field (coerce existing-value)]))))
 
 (defn records
   "reads records from the input stream. returns a lazy sequence of
