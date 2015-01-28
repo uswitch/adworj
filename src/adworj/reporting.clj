@@ -91,19 +91,26 @@
 (defn parse-int [s]
   (Integer/valueOf s))
 
+(defn parse-double [s]
+  (Double/valueOf s))
+
+(defn parse-percentage [s]
+  (/ (Double/valueOf (re-find #"^[\d.]+" s)) 100))
+
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
   :account-currency-code                 "AccountCurrencyCode"  
   :account-descriptive-name              "AccountDescriptiveName"
   :account-time-zone-id                  "AccountTimeZoneId"
-  :ad-group-id                           "AdGroupId"
+  :ad-group-id                           {:name "AdGroupId" :parse parse-int}
   :ad-group-name                         "AdGroupName"
-  :average-cpc                           "AverageCpc"
-  :average-position                      "AveragePosition"
-  :campaign-id                           "CampaignId"
+  :average-cpc                           {:name "AverageCpc" :parse parse-int}
+  :average-position                      {:name "AveragePosition" :parse parse-double}
+  :campaign-id                           {:name "CampaignId" :parse parse-int}
   :campaign-name                         "CampaignName"
-  :clicks                                "Clicks"
+  :clicks                                {:name "Clicks" :parse parse-int}
   :combined-ads-organic-clicks           "CombinedAdsOrganicClicks"
-  :combined-ads-organic-clicks-per-query "CombinedAdsOrganicClicksPerQuery"
+
+  :combined-ads-organic-clicks-per-query {:name "CombinedAdsOrganicClicksPerQuery" :parse parse-percentage}
   :combined-ads-organic-queries          "CombinedAdsOrganicQueries"
   :ctr                                   "Ctr"
   :customer-descriptive-name             "CustomerDescriptiveName"
