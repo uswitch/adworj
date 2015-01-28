@@ -606,9 +606,9 @@
   "provides uncompressed access to the stream of report data. returns an input stream
   that should be closed when finished.
   adwords-session: optimally a reporting-session to avoid header + summary"
-  [adwords-session report-specification]
+  [adwords-session report-definition]
   (let [downloader (ReportDownloader. adwords-session)
-        response   (.downloadReport downloader (:definition report-specification))]
+        response   (.downloadReport downloader report-definition)]
     (GZIPInputStream. (.getInputStream response))))
 
 (defn records
@@ -616,18 +616,14 @@
   records. converts records into clojure maps with their attributes
   as keywords.
   e.g. (with-open [rdr (reader (report-stream ...))]
-         (doseq [rec (records reader report-spec)]
+         (doseq [rec (records reader selected-fields)]
            ...
     produces => [{:ad-group-name ..."
-  [reader report-spec]
-  (let [records (csv/read-csv reader)
-        selected-fields (:selected-fields report-spec)]
+  [reader selected-fields]
+  (let [records (csv/read-csv reader)]
     (map (fn [cells]
            (apply array-map (interleave selected-fields cells)))
          (rest records))))
-
-
-
 
 (defn save-to-file
   "runs report and writes (uncompressed) csv data directly to out-file.
@@ -652,11 +648,11 @@
 
 (defn make-report [report-spec]
   (fn [session]
-    (let [r (io/reader (report-stream session report-spec))]
+    (let [r (io/reader (report-stream session (:definition report-spec)))]
       (reify
         RecordReader
         (readRecords [this]
-          (records r report-spec))
+          (records r (:selected-fields report-spec)))
         java.io.Closeable
         (close [this]
           (.close r))))))
