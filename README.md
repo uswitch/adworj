@@ -42,11 +42,10 @@ Having successfully authenticated, and updated the properties file with your con
 (def session            (ar/reporting-session "./ads.properties" credentials
                                               :client-customer-id client-customer-id))
 
-(let [report-spec (ar/report-specification ar/paid-and-organic-query "sample report"
-                                       :range (ar/date-range :last-week))]
-  (with-open [rdr (io/reader (ar/report-stream session report-spec))]
-    (doseq [record (take 5 (ar/records rdr report-spec))]
-      (println "Record: " record))))
+(with-open [report (ar/run ar/paid-and-organic-query session "sample report" :range (ar/date-range :last-week))]
+  (doseq [record (ar/record-seq report)]
+    (println record)))))
+
 ```
 
 ## License

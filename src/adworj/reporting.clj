@@ -16,8 +16,6 @@
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
 
-(defprotocol RecordReader (record-seq [this]))
-
 (defrecord ReportSpecification [type field-mappings])
 
 (defn date-range
@@ -639,21 +637,17 @@
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
 
+(defprotocol RecordReader (record-seq [this]))
 
-(defprotocol Runner
-  (run [session name & opts]))
-
-(extend-protocol Runner
-  ReportSpecification
-  (run [report session name & {:keys [range selected-fields]
-                             :or   {range           (date-range :yesterday)
-                                    selected-fields (:field-mappings report)}}]
-    (let [report-def (report-definition report name range selected-fields)
-          r (io/reader (report-stream session report-def))]
-      (reify
-        RecordReader
-        (record-seq [this]
-          (records r selected-fields))
-        java.io.Closeable
-        (close [this]
-          (.close r))))))
+(defn run [report session name & {:keys [range selected-fields]
+                                  :or   {range           (date-range :yesterday)
+                                         selected-fields (all-fields report)}}]
+  (let [report-def (report-definition report name range selected-fields)
+        r (io/reader (report-stream session report-def))]
+    (reify
+      RecordReader
+      (record-seq [this]
+        (records r selected-fields))
+      java.io.Closeable
+      (close [this]
+        (.close r)))))
