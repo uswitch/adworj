@@ -640,27 +640,24 @@
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
 
-;; (let [report-spec (ar/report-specification ar/paid-and-organic-query "sample report" :range (ar/date-range :last-week))
-;;       report (ar/make-report report-spec)]
-;;   (with-open [rdr (report session)]
-;;     (doseq [record (take 5 (.readRecords rdr))]
-;;       (println "Record: " (pr-str record)))))
-
 (defprotocol RecordReader (readRecords [this]))
 
-(defn make-report [report-spec]
-  (fn [session]
-    (let [r (io/reader (report-stream session (:definition report-spec)))]
-      (reify
-        RecordReader
-        (readRecords [this]
-          (records r (:selected-fields report-spec)))
-        java.io.Closeable
-        (close [this]
-          (.close r))))))
+(defn make-report [report name range selected-fields]
+  (let [report-def (report-definition report name range selected-fields)]
+    (fn [session]
+      (let [r (io/reader (report-stream session report-def))]
+        (reify
+          RecordReader
+          (readRecords [this]
+            (records r selected-fields))
+          java.io.Closeable
+          (close [this]
+            (.close r)))))))
 
-(defn paid-and-organic-query-report [name & {:keys [range selected-fields]
-                                             :or   {range           (date-range :yesterday)
-                                                    selected-fields (all-fields paid-and-organic-query)}}]
-    (make-report {:definition (report-definition paid-and-organic-query name range selected-fields)
-                  :selected-fields selected-fields}))
+(defmacro defreporter [reporter report]
+  `(defn ~reporter [name# & {:keys [range# selected-fields#]
+                   :or   {range#           (date-range :yesterday)
+                          selected-fields# (all-fields ~report)}}]
+     (make-report ~report name# range# selected-fields#)))
+
+(defreporter paid-and-organic-query-report paid-and-organic-query)
