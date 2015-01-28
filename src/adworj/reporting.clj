@@ -50,7 +50,7 @@
   {:pre [(set/subset? (set fields) (set (all-fields report)))]}
   (let [mappings (:field-mappings report)
         field-name (fn [field] (let [m (get mappings field)]
-                                 (if (string? m) m (:name m))))]    
+                                 (if (string? m) m (:name m))))]
     (map field-name fields)))
 
 (defn- selector []
@@ -88,8 +88,8 @@
 (defmacro defreport [name type & field-mappings]
   `(def ~name (report-specification ~type ~@field-mappings)))
 
-(defn parse-int [s]
-  (Integer/valueOf s))
+(defn parse-long [s]
+  (Long/valueOf s))
 
 (defn parse-double [s]
   (Double/valueOf s))
@@ -98,34 +98,34 @@
   (/ (Double/valueOf (re-find #"^[\d.]+" s)) 100))
 
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
-  :account-currency-code                 "AccountCurrencyCode"  
+  :account-currency-code                 "AccountCurrencyCode"
   :account-descriptive-name              "AccountDescriptiveName"
   :account-time-zone-id                  "AccountTimeZoneId"
-  :ad-group-id                           {:name "AdGroupId" :parse parse-int}
+  :ad-group-id                           {:name "AdGroupId" :parse parse-long}
   :ad-group-name                         "AdGroupName"
-  :average-cpc                           {:name "AverageCpc" :parse parse-int}
+  :average-cpc                           {:name "AverageCpc" :parse parse-long}
   :average-position                      {:name "AveragePosition" :parse parse-double}
-  :campaign-id                           {:name "CampaignId" :parse parse-int}
+  :campaign-id                           {:name "CampaignId" :parse parse-long}
   :campaign-name                         "CampaignName"
-  :clicks                                {:name "Clicks" :parse parse-int}
-  :combined-ads-organic-clicks           "CombinedAdsOrganicClicks"
+  :clicks                                {:name "Clicks" :parse parse-long}
+  :combined-ads-organic-clicks           {:name "CombinedAdsOrganicClicks" :parse parse-long}
 
   :combined-ads-organic-clicks-per-query {:name "CombinedAdsOrganicClicksPerQuery" :parse parse-percentage}
-  :combined-ads-organic-queries          "CombinedAdsOrganicQueries"
-  :ctr                                   "Ctr"
+  :combined-ads-organic-queries          {:name "CombinedAdsOrganicQueries" :parse parse-long}
+  :ctr                                   {:name "Ctr" :parse parse-percentage}
   :customer-descriptive-name             "CustomerDescriptiveName"
   :date                                  "Date"
   :external-customer-id                  "ExternalCustomerId"
-  :impressions                           "Impressions"
+  :impressions                           {:name "Impressions" :parse parse-long}
   :keyword-id                            "KeywordId"
   :keyword-text-matching-query           "KeywordTextMatchingQuery"
   :match-type                            "MatchType"
   :organic-average-position              "OrganicAveragePosition"
-  :organic-clicks                        "OrganicClicks"
-  :organic-clicks-per-query              "OrganicClicksPerQuery"
-  :organic-impressions                   "OrganicImpressions"
-  :organic-impressions-per-query         "OrganicImpressionsPerQuery"
-  :organic-queries                       {:name "OrganicQueries" :parse parse-int}
+  :organic-clicks                        {:name "OrganicClicks" :parse parse-long}
+  :organic-clicks-per-query              {:name "OrganicClicksPerQuery" :parse parse-percentage}
+  :organic-impressions                   {:name "OrganicImpressions" :parse parse-long}
+  :organic-impressions-per-query         {:name "OrganicImpressionsPerQuery" :parse parse-percentage}
+  :organic-queries                       {:name "OrganicQueries" :parse parse-long}
   :primary-company-name                  "PrimaryCompanyName"
   :search-query                          "SearchQuery"
   :serp-type                             "SerpType")
@@ -628,7 +628,7 @@
                [field parse-fn]))))
 
 (defn coerce-record [coercions m]
-  (into m (for [[field coerce] coercions]            
+  (into m (for [[field coerce] coercions]
             [field (coerce (field m))])))
 
 (defn records
