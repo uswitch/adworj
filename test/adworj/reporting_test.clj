@@ -37,3 +37,7 @@
 (deftest report-field-names-test
   (is (= 49 (count (r/all-fields r/search-query-performance))))
   (is (= :account-currency-code (first (r/all-fields r/search-query-performance)))))
+
+(deftest coercions-test
+  (is (= {:bar "baz" :foo 1} (r/coerce-record {:foo (constantly 1)} {:foo "123" :bar "baz"}))))
+  

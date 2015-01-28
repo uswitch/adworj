@@ -8,5 +8,5 @@
         session            (ar/reporting-session ads-properties credentials
                              :client-customer-id client-customer-id)]
 	  (with-open [report (ar/run ar/paid-and-organic-query session "sample report" :range (ar/date-range :last-week))]
-      (doseq [record (take 5 (ar/record-seq report))]
-        (println record)))))
+      (doseq [record (take 25 (ar/record-seq report))]
+        (println (pr-str record))))))

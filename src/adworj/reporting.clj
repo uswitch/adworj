@@ -48,8 +48,10 @@
 (defn selected-field-names
   [report & fields]
   {:pre [(set/subset? (set fields) (set (all-fields report)))]}
-  (let [mappings (:field-mappings report)]
-    (map (partial get mappings) fields)))
+  (let [mappings (:field-mappings report)
+        field-name (fn [field] (let [m (get mappings field)]
+                                 (if (string? m) m (:name m))))]    
+    (map field-name fields)))
 
 (defn- selector []
   (Selector. ))
@@ -86,8 +88,11 @@
 (defmacro defreport [name type & field-mappings]
   `(def ~name (report-specification ~type ~@field-mappings)))
 
+(defn parse-int [s]
+  (Integer/valueOf s))
+
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
-  :account-currency-code                 "AccountCurrencyCode"
+  :account-currency-code                 "AccountCurrencyCode"  
   :account-descriptive-name              "AccountDescriptiveName"
   :account-time-zone-id                  "AccountTimeZoneId"
   :ad-group-id                           "AdGroupId"
@@ -113,7 +118,7 @@
   :organic-clicks-per-query              "OrganicClicksPerQuery"
   :organic-impressions                   "OrganicImpressions"
   :organic-impressions-per-query         "OrganicImpressionsPerQuery"
-  :organic-queries                       "OrganicQueries"
+  :organic-queries                       {:name "OrganicQueries" :parse parse-int}
   :primary-company-name                  "PrimaryCompanyName"
   :search-query                          "SearchQuery"
   :serp-type                             "SerpType")
@@ -610,6 +615,15 @@
         response   (.downloadReport downloader report-definition)]
     (GZIPInputStream. (.getInputStream response))))
 
+(defn coercions [report]
+  (into {} (for [[field x] (:field-mappings report)]
+             (when-let [parse-fn (:parse x)]
+               [field parse-fn]))))
+
+(defn coerce-record [coercions m]
+  (into m (for [[field coerce] coercions]            
+            [field (coerce (field m))])))
+
 (defn records
   "reads records from the input stream. returns a lazy sequence of
   records. converts records into clojure maps with their attributes
@@ -618,11 +632,12 @@
          (doseq [rec (records reader selected-fields)]
            ...
     produces => [{:ad-group-name ..."
-  [reader selected-fields]
+  [reader selected-fields coercions]
   (let [records (csv/read-csv reader)]
-    (map (fn [cells]
-           (apply array-map (interleave selected-fields cells)))
-         (rest records))))
+    (->> (rest records) ;; drop header row
+      (map (fn [cells]
+             (apply array-map (interleave selected-fields cells))))
+      (map (partial coerce-record coercions)))))
 
 (defn save-to-file
   "runs report and writes (uncompressed) csv data directly to out-file.
@@ -647,7 +662,7 @@
     (reify
       RecordReader
       (record-seq [this]
-        (records r selected-fields))
+        (records r selected-fields (coercions report)))
       java.io.Closeable
       (close [this]
         (.close r)))))
