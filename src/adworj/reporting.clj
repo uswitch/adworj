@@ -3,6 +3,7 @@
             [clj-time.core :as tc]
             [adworj.credentials :as ac]
             [clojure.data.csv :as csv]
+            [clojure.set :as set]
             [clojure.java.io :as io])
   (:import [com.google.api.ads.adwords.lib.jaxb.v201409 ReportDefinition ReportDefinitionReportType]
            [com.google.api.ads.adwords.lib.jaxb.v201409 DownloadFormat]
@@ -15,7 +16,7 @@
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
 
-(defrecord Report [type field-mappings])
+(defrecord ReportSpecification [type field-mappings])
 
 (defn date-range
   "specify the date range for the report to cover. can be a set of predefined options,
@@ -40,10 +41,15 @@
     :min  (tf/unparse adwords-date-format start)
     :max  (tf/unparse adwords-date-format end)}))
 
-(defn selected-field-names [report & fields]
-  (let [mappings (:field-mappings report)
-        selected (or fields (keys mappings))]
-    (map (partial get mappings) selected)))
+
+(defn all-fields [report]
+  (keys (:field-mappings report)))
+
+(defn selected-field-names
+  [report & fields]
+  {:pre [(set/subset? (set fields) (set (all-fields report)))]}
+  (let [mappings (:field-mappings report)]
+    (map (partial get mappings) fields)))
 
 (defn- selector []
   (Selector. ))
@@ -54,8 +60,8 @@
     ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
     true))
 
-(defn report-definition [report name & {:keys [range selected-fields]
-                                        :or   {range (date-range :yesterday)}}]
+
+(defn report-definition [report name range selected-fields]
   (let [definition             (doto (ReportDefinition. )
                                  (.setReportName name)
                                  (.setReportType (:type report))
@@ -74,11 +80,11 @@
       (.setIncludeZeroImpressions (zero-impressionable? (:type report)))
       (.setSelector sel))))
 
-(defn report [type & field-mappings]
-  (Report. type (apply array-map field-mappings)))
+(defn report-specification [type & field-mappings]
+  (ReportSpecification. type (apply array-map field-mappings)))
 
 (defmacro defreport [name type & field-mappings]
-  `(def ~name (report ~type ~@field-mappings)))
+  `(def ~name (report-specification ~type ~@field-mappings)))
 
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
   :account-currency-code                 "AccountCurrencyCode"
@@ -577,6 +583,7 @@
   :year                                 "Year")
 
 
+
 (defn configure-session-for-reporting
   "optimizes session configuration for reporting."
   [^AdWordsSession adwords-session]
@@ -608,18 +615,14 @@
   records. converts records into clojure maps with their attributes
   as keywords.
   e.g. (with-open [rdr (reader (report-stream ...))]
-         (doseq [rec (records reader search-query)]
+         (doseq [rec (records reader selected-fields)]
            ...
-    produces => {:ad-group-name ..."
-  [reader]
-  (let [records (csv/read-csv reader)
-        header  (first records)]
+    produces => [{:ad-group-name ..."
+  [reader selected-fields]
+  (let [records (csv/read-csv reader)]
     (map (fn [cells]
-           (apply array-map (interleave header cells)))
+           (apply array-map (interleave selected-fields cells)))
          (rest records))))
-
-
-
 
 (defn save-to-file
   "runs report and writes (uncompressed) csv data directly to out-file.
@@ -633,3 +636,18 @@
     (with-open [reader (io/reader is)]
       (with-open [writer (io/writer out-file)]
         (io/copy reader writer)))))
+
+(defprotocol RecordReader (record-seq [this]))
+
+(defn run [report session name & {:keys [range selected-fields]
+                                  :or   {range           (date-range :yesterday)
+                                         selected-fields (all-fields report)}}]
+  (let [report-def (report-definition report name range selected-fields)
+        r (io/reader (report-stream session report-def))]
+    (reify
+      RecordReader
+      (record-seq [this]
+        (records r selected-fields))
+      java.io.Closeable
+      (close [this]
+        (.close r)))))

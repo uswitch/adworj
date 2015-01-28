@@ -33,7 +33,7 @@ Having successfully authenticated, and updated the properties file with your con
 
 ```clojure
 (ns reporter
-  (:importer [adworj.credentials :as ac]
+  (:require [adworj.credentials :as ac]
              [adworj.reporting :as ar]
              [clojure.java.io :as io]))
 
@@ -42,11 +42,10 @@ Having successfully authenticated, and updated the properties file with your con
 (def session            (ar/reporting-session "./ads.properties" credentials
                                               :client-customer-id client-customer-id))
 
-(let [report-def (ar/report-definition ar/search-query-performance "sample report"
-                                       :range (ar/date-range :last-week))]
-  (with-open [rdr (io/reader (ar/report-stream session report-def))]
-    (doseq [record (ar/records rdr)]
-      (println "Record: " record))))
+(with-open [report (ar/run ar/paid-and-organic-query session "sample report" :range (ar/date-range :last-week))]
+  (doseq [record (ar/record-seq report)]
+    (println record)))))
+
 ```
 
 ## License
