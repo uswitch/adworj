@@ -59,9 +59,7 @@
     ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
     true))
 
-(defn report-specification [report name & {:keys [range selected-fields]
-                                           :or   {range           (date-range :yesterday)
-                                                  selected-fields (all-fields report)}}]
+(defn report-definition [report name range selected-fields]
   (let [definition             (doto (ReportDefinition. )
                                  (.setReportName name)
                                  (.setReportType (:type report))
@@ -78,9 +76,13 @@
     (.. sel getFields (addAll (apply selected-field-names report selected-fields)))
     (doto definition
       (.setIncludeZeroImpressions (zero-impressionable? (:type report)))
-      (.setSelector sel))
-    {:definition definition
-     :selected-fields selected-fields}))
+      (.setSelector sel))))
+
+(defn report-specification [report name & {:keys [range selected-fields]
+                                           :or   {range           (date-range :yesterday)
+                                                  selected-fields (all-fields report)}}]
+  {:definition (report-definition report name range selected-fields)
+   :selected-fields selected-fields})
 
 (defn report [type & field-mappings]
   (Report. type (apply array-map field-mappings)))
@@ -656,3 +658,9 @@
         java.io.Closeable
         (close [this]
           (.close r))))))
+
+(defn paid-and-organic-query-report [name & {:keys [range selected-fields]
+                                             :or   {range           (date-range :yesterday)
+                                                    selected-fields (all-fields paid-and-organic-query)}}]
+    (make-report {:definition (report-definition paid-and-organic-query name range selected-fields)
+                  :selected-fields selected-fields}))
