@@ -60,6 +60,7 @@
   (condp = report-type
     ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT false
     ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
+    ReportDefinitionReportType/GEO_PERFORMANCE_REPORT false
     true))
 
 
@@ -182,7 +183,7 @@
   :year                                "Year")
 
 (defreport geo-performance ReportDefinitionReportType/GEO_PERFORMANCE_REPORT
-  :account-currency-code               "Currency"
+  :account-currency-code               "AccountCurrencyCode"
   :account-descriptive-name            "AccountDescriptiveName"
   :account-time-zone-id                "AccountTimeZoneId"
   :ad-format                           "AdFormat"
@@ -191,33 +192,34 @@
   :ad-group-status                     "AdGroupStatus"
   :ad-network-type-1                   "AdNetworkType1"
   :ad-network-type-2                   "AdNetworkType2"
-  :average-cpc                         "AverageCpc"
-  :average-cpm                         "AverageCpm"
-  :average-position                    "AveragePosition"
+  :average-cpc                         {:name "AverageCpc" :parse parse-long}
+  :average-cpm                         {:name "AverageCpm" :parse parse-long}
+  :average-position                    {:name "AveragePosition" :parse parse-double}
   :campaign-id                         "CampaignId"
   :campaign-name                       "CampaignName"
   :campaign-status                     "CampaignStatus"
+  :country-criteria-id                 "CountryCriteriaId"
   :city-criteria-id                    "CityCriteriaId"
-  :clicks                              "Clicks"
+  :clicks                              {:name "Clicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate                     "ConversionRate"
-  :conversion-rate-many-per-click      "ConversionRateManyPerClick"
+  :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
+  :conversion-rate-many-per-click      {:name "ConversionRateManyPerClick" :parse parse-percentage}
   :conversion-tracker-id               "ConversionTrackerId"
   :conversion-type-name                "ConversionTypeName"
-  :conversion-value                    "ConversionValue"
-  :conversions                         "Conversions"
-  :conversions-many-per-click          "ConversionsManyPerClick"
-  :cost                                "Cost"
-  :cost-per-conversion                 "CostPerConversion"
-  :cost-per-conversion-many-per-click  "CostPerConversionManyPerClick"
+  :conversion-value                    {:name "ConversionValue" :parse parse-double}
+  :conversions                         {:name "Conversions" :parse parse-long}
+  :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
+  :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-double}
+  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
   :country-criteria-id                 "CountryCriteriaId"
-  :ctr                                 "Ctr"
+  :ctr                                 {:name "Ctr" :parse parse-percentage}
   :customer-descriptive-name           "CustomerDescriptiveName"
   :date                                "Date"
   :day-of-week                         "DayOfWeek"
   :device                              "Device"
   :external-customer-id                "ExternalCustomerId"
-  :impressions                         "Impressions"
+  :impressions                         {:name "Impressions" :parse parse-long}
   :is-targeting-location               "IsTargetingLocation"
   :location-type                       "LocationType"
   :metro-criteria-id                   "MetroCriteriaId"
@@ -227,9 +229,9 @@
   :primary-company-name                "PrimaryCompanyName"
   :quarter                             "Quarter"
   :region-criteria-id                  "RegionCriteriaId"
-  :value-per-conversion                "ValuePerConversion"
-  :value-per-conversion-many-per-click "ValuePerConversionManyPerClick"
-  :view-through-conversions            "ViewThroughConversions"
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
+  :value-per-conversion-many-per-click {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :view-through-conversions            {:name "ViewThroughConversions" :parse parse-long}
   :week                                "Week"
   :year                                "Year")
 
