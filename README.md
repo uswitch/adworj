@@ -42,7 +42,7 @@ Having successfully authenticated, and updated the properties file with your con
 (def session            (ar/reporting-session "./ads.properties" credentials
                                               :client-customer-id client-customer-id))
 
-(with-open [report (ar/run ar/paid-and-organic-query session "sample report" :range (ar/date-range :last-week))]
+(with-open [report (ar/run session ar/paid-and-organic-query "sample report" :range (ar/date-range :last-week))]
   (doseq [record (ar/record-seq report)]
     (println record)))))
 

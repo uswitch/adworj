@@ -140,32 +140,32 @@
   :ad-group-status                     "AdGroupStatus"
   :ad-network-type-1                   "AdNetworkType1"
   :ad-network-type-2                   "AdNetworkType2"
-  :average-cpc                         "AverageCpc"
-  :average-cpm                         "AverageCpm"
-  :average-position                    "AveragePosition"
+  :average-cpc                         {:name "AverageCpc" :parse parse-long}
+  :average-cpm                         {:name "AverageCpm" :parse parse-long}
+  :average-position                    {:name "AveragePosition" :parse parse-double}
   :campaign-id                         "CampaignId"
   :campaign-name                       "CampaignName"
   :campaign-status                     "CampaignStatus"
-  :clicks                              "Clicks"
+  :clicks                              {:name "Clicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
   :click-conversion-rate               "ConversionRate"
   :conversion-type-name                "ConversionTypeName"
-  :conversion-value                    "ConversionValue"
-  :conversions                         "Conversions"
-  :conversions-many-per-click          "ConversionsManyPerClick"
+  :conversion-value                    {:name "ConversionValue" :parse parse-double}
+  :conversions                         {:name "Conversions" :parse parse-long}
+  :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
   :client-name                         "CustomerDescriptiveName"
-  :conversion-rate                     "ConversionRateManyPerClick"
-  :cost                                "Cost"
-  :cost-per-conversion                 "CostPerConversion"
-  :cost-per-conversion-many-per-click  "CostPerConversionManyPerClick"
+  :conversion-rate                     {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
+  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
   :creative-id                         "CreativeId"
-  :ctr                                 "Ctr"
+  :ctr                                 {:name "Ctr" :parse parse-percentage}
   :date                                "Date"
   :day-of-week                         "DayOfWeek"
   :destination-url                     "DestinationUrl"
   :device                              "Device"
   :external-customer-id                "ExternalCustomerId"
-  :impressions                         "Impressions"
+  :impressions                         {:name "Impressions" :parse parse-long}
   :keyword-id                          "KeywordId"
   :keyword-text-matching-query         "KeywordTextMatchingQuery"
   :match-type                          "MatchType"
@@ -175,9 +175,9 @@
   :primary-company-name                "PrimaryCompanyName"
   :quarter                             "Quarter"
   :query                               "Query"
-  :value-per-conversion                "ValuePerConversion"
-  :value-per-conversion-many-per-click "ValuePerConversionManyPerClick"
-  :view-through-conversions            "ViewThroughConversions"
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
+  :value-per-conversion-many-per-click {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :view-through-conversions            {:name "ViewThroughConversions" :parse parse-long}
   :week                                "Week"
   :year                                "Year")
 
@@ -662,7 +662,7 @@
 
 (defprotocol RecordReader (record-seq [this]))
 
-(defn run [report session name & {:keys [range selected-fields]
+(defn run [session report name & {:keys [range selected-fields]
                                   :or   {range           (date-range :yesterday)
                                          selected-fields (all-fields report)}}]
   (let [report-def (report-definition report name range selected-fields)
