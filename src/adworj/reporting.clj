@@ -386,33 +386,33 @@
   :ad-group-status                     "AdGroupStatus"
   :ad-network-type-1                   "AdNetworkType1"
   :ad-network-type-2                   "AdNetworkType2"
-  :average-cpc                         "AverageCpc"
-  :average-cpm                         "AverageCpm"
-  :average-position                    "AveragePosition"
+  :average-cpc                         {:name "AverageCpc" :parse parse-long}
+  :average-cpm                         {:name "AverageCpm" :parse parse-long}
+  :average-position                    {:name "AveragePosition" :parse parse-double}
   :bid-modifier                        "BidModifier"
   :bid-type                            "BidType"
   :campaign-id                         "CampaignId"
   :campaign-name                       "CampaignName"
   :campaign-status                     "CampaignStatus"
   :click-type                          "ClickType"
-  :clicks                              "Clicks"
+  :clicks                              {:name "Clicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate                     "ConversionRate"
-  :conversion-rate-many-per-click      "ConversionRateManyPerClick"
+  :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
+  :conversion-rate-many-per-click      {:name "ConversionRateManyPerClick" :parse parse-percentage}
   :conversion-type-name                "ConversionTypeName"
-  :conversion-value                    "ConversionValue"
-  :conversions                         "Conversions"
-  :conversions-many-per-click          "ConversionsManyPerClick"
-  :cost                                "Cost"
-  :cost-per-conversion                 "CostPerConversion"
-  :cost-per-conversion-many-per-click  "CostPerConversionManyPerClick"
+  :conversion-value                    {:name "ConversionValue" :parse parse-double}
+  :conversions                         {:name "Conversions" :parse parse-long}
+  :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
+  :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
+  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
   :cpc-bid                             "CpcBid"
   :cpc-bid-source                      "CpcBidSource"
   :cpm-bid                             "CpmBid"
   :cpm-bid-source                      "CpmBidSource"
   :criteria                            "Criteria"
   :criteria-destination-url            "CriteriaDestinationUrl"
-  :ctr                                 "Ctr"
+  :ctr                                 {:name "Ctr" :parse parse-percentage}
   :customer-descriptive-name           "CustomerDescriptiveName"
   :date                                "Date"
   :day-of-week                         "DayOfWeek"
@@ -420,7 +420,7 @@
   :device                              "Device"
   :external-customer-id                "ExternalCustomerId"
   :id                                  "Id"
-  :impressions                         "Impressions"
+  :impressions                         {:name "Impressions" :parse parse-long}
   :is-negative                         "IsNegative"
   :is-restrict                         "IsRestrict"
   :month                               "Month"
@@ -429,8 +429,8 @@
   :quarter                             "Quarter"
   :slot                                "Slot"
   :status                              "Status"
-  :value-per-conversion                "ValuePerConversion"
-  :value-per-conversion-many-per-click "ValuePerConversionManyPerClick"
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
+  :value-per-conversion-many-per-click {:name "ValuePerConversionManyPerClick" :parse parse-double}
   :view-through-conversions            "ViewThroughConversions"
   :week                                "Week"
   :year                                "Year")
