@@ -247,9 +247,9 @@
   :ad-network-type-2                               "AdNetworkType2"
   :advertiser-experiment-segmentation-bin          "AdvertiserExperimentSegmentationBin"
   :approval-status                                 "ApprovalStatus"
-  :average-cpc                                     "AverageCpc"
-  :average-cpm                                     "AverageCpm"
-  :average-position                                "AveragePosition"
+  :average-cpc                                     {:name "AverageCpc" :parse parse-long}
+  :average-cpm                                     {:name "AverageCpm" :parse parse-long}
+  :average-position                                {:name "AveragePosition" :parse parse-double}
   :bid-modifier                                    "BidModifier"
   :bid-type                                        "BidType"
   :campaign-id                                     "CampaignId"
@@ -257,25 +257,25 @@
   :campaign-status                                 "CampaignStatus"
   :click-significance                              "ClickSignificance"
   :click-type                                      "ClickType"
-  :clicks                                          "Clicks"
+  :clicks                                          {:name "Clicks" :parse parse-long}
   :conversion-category-name                        "ConversionCategoryName"
   :conversion-many-per-click-significance          "ConversionManyPerClickSignificance"
-  :conversion-rate                                 "ConversionRate"
-  :conversion-rate-many-per-click                  "ConversionRateManyPerClick"
+  :conversion-rate                                 {:name "ConversionRate" :parse parse-percentage}
+  :conversion-rate-many-per-click                  {:name "ConversionRateManyPerClick" :parse parse-percentage}
   :conversion-rate-many-per-click-significance     "ConversionRateManyPerClickSignificance"
   :conversion-rate-significance                    "ConversionRateSignificance"
   :conversion-significance                         "ConversionSignificance"
   :conversion-type-name                            "ConversionTypeName"
   :conversion-value                                "ConversionValue"
-  :conversions                                     "Conversions"
-  :conversions-many-per-click                      "ConversionsManyPerClick"
-  :cost                                            "Cost"
-  :cost-per-conversion                             "CostPerConversion"
-  :cost-per-conversion-many-per-click              "CostPerConversionManyPerClick"
+  :conversions                                     {:name "Conversions" :parse parse-long}
+  :conversions-many-per-click                      {:name "ConversionsManyPerClick" :parse parse-long}
+  :cost                                            {:name "Cost" :parse parse-long}
+  :cost-per-conversion                             {:name "CostPerConversion" :parse parse-long}
+  :cost-per-conversion-many-per-click              {:name "CostPerConversionManyPerClick" :parse parse-long}
   :cost-per-conversion-many-per-click-significance "CostPerConversionManyPerClickSignificance"
   :cost-per-conversion-significance                "CostPerConversionSignificance"
   :cost-significance                               "CostSignificance"
-  :cpc-bid                                         "CpcBid"
+  :cpc-bid                                         {:name "CpcBid" :parse parse-long}
   :cpc-bid-source                                  "CpcBidSource"
   :cpc-significance                                "CpcSignificance"
   :cpm-bid                                         "CpmBid"
@@ -283,7 +283,7 @@
   :criteria                                        "Criteria"
   :criteria-destination-url                        "CriteriaDestinationUrl"
   :criteria-type                                   "CriteriaType"
-  :ctr                                             "Ctr"
+  :ctr                                             {:name "Ctr" :parse parse-percentage}
   :ctr-significance                                "CtrSignificance"
   :customer-descriptive-name                       "CustomerDescriptiveName"
   :date                                            "Date"
@@ -295,10 +295,10 @@
   :final-app-urls                                  "FinalAppUrls"
   :final-mobile-urls                               "FinalMobileUrls"
   :final-urls                                      "FinalUrls"
-  :first-page-cpc                                  "FirstPageCpc"
+  :first-page-cpc                                  {:name "FirstPageCpc" :parse parse-long}
   :id                                              "Id"
   :impression-significance                         "ImpressionSignificance"
-  :impressions                                     "Impressions"
+  :impressions                                     {:name "Impressions" :parse parse-long}
   :is-negative                                     "IsNegative"
   :label-ids                                       "LabelIds"
   :labels                                          "Labels"
@@ -307,16 +307,16 @@
   :parameter                                       "Parameter"
   :position-significance                           "PositionSignificance"
   :primary-company-name                            "CompanyName"
-  :quality-score                                   "QualityScore"
+  :quality-score                                   {:name "QualityScore" :parse parse-long}
   :quarter                                         "Quarter"
   :slot                                            "Slot"
   :status                                          "Status"
-  :top-of-page-cpc                                 "TopOfPageCpc"
+  :top-of-page-cpc                                 {:name "TopOfPageCpc" :parse parse-long}
   :tracking-url-template                           "TrackingUrlTemplate"
   :url-custom-parameters                           "UrlCustomParameters"
-  :value-per-conversion                            "ValuePerConversion"
+  :value-per-conversion                            {:name "ValuePerConversion" :parse parse-double}
   :value-per-conversion-many-per-click             "ValuePerConversionManyPerClick"
-  :view-through-conversions                        "ViewThroughConversions"
+  :view-through-conversions                        {:name "ViewThroughConversions" :parse parse-long}
   :view-through-conversions-significance           "ViewThroughConversionsSignificance"
   :week                                            "Week"
   :year                                            "Year")
