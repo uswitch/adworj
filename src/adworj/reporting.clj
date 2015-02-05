@@ -149,7 +149,7 @@
   :campaign-status                     "CampaignStatus"
   :clicks                              {:name "Clicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
-  :click-conversion-rate               "ConversionRate"
+  :click-conversion-rate               {:name "ConversionRate" :parse parse-percentage}
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
   :conversions                         {:name "Conversions" :parse parse-long}
