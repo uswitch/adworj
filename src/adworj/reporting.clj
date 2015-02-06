@@ -102,11 +102,11 @@
   :account-currency-code                 "AccountCurrencyCode"
   :account-descriptive-name              "AccountDescriptiveName"
   :account-time-zone-id                  "AccountTimeZoneId"
-  :ad-group-id                           {:name "AdGroupId" :parse parse-long}
+  :ad-group-id                           "AdGroupId"
   :ad-group-name                         "AdGroupName"
   :average-cpc                           {:name "AverageCpc" :parse parse-long}
   :average-position                      {:name "AveragePosition" :parse parse-double}
-  :campaign-id                           {:name "CampaignId" :parse parse-long}
+  :campaign-id                           "CampaignId"
   :campaign-name                         "CampaignName"
   :clicks                                {:name "Clicks" :parse parse-long}
   :combined-ads-organic-clicks           {:name "CombinedAdsOrganicClicks" :parse parse-long}
