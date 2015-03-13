@@ -8,8 +8,33 @@
         session            (ar/reporting-session ads-properties credentials
                                                  :client-customer-id client-customer-id)]
     (with-open [report (ar/run session
-                         ar/search-query-performance
+                         ar/keywords-performance
                          "sample report" :range (ar/date-range :last-week)
-                         :selected-fields [:average-cpc :average-cpm :average-position :campaign-id :campaign-name :clicks :date :conversion-value :conversions :conversions-many-per-click :conversion-rate :cost :cost-per-conversion :cost-per-conversion-many-per-click :ctr :impressions :value-per-conversion :value-per-conversion-many-per-click :view-through-conversions])]
+                         :selected-fields [:ad-group-id
+                                           :ad-group-name
+                                           :ad-group-status
+                                           :approval-status
+                                           :average-cpc
+                                           :average-cpm
+                                           :average-position
+                                           :campaign-id
+                                           :campaign-name
+                                           :campaign-status
+                                           :click-type
+                                           :clicks
+                                           :conversions-many-per-click
+                                           :cost
+                                           :cost-per-conversion-many-per-click
+                                           :cpc-bid
+                                           :cpm-bid
+                                           :ctr
+                                           :date
+                                           :device
+                                           :first-page-cpc
+                                           :keyword-id
+                                           :impressions
+                                           :keyword-text
+                                           :quality-score
+                                           :top-of-page-cpc])]
       (doseq [record (take 5 (ar/record-seq report))]
         (println (pr-str record))))))

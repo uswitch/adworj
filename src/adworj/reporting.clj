@@ -59,8 +59,9 @@
 (defn zero-impressionable? [^ReportDefinitionReportType report-type]
   (condp = report-type
     ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT false
-    ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT false
-    ReportDefinitionReportType/GEO_PERFORMANCE_REPORT false
+    ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT       false
+    ReportDefinitionReportType/GEO_PERFORMANCE_REPORT          false
+    ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT     false
     true))
 
 
@@ -97,6 +98,91 @@
 
 (defn parse-percentage [s]
   (/ (Double/valueOf (re-find #"^[\d.]+" s)) 100))
+
+(defreport keywords-performance ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT
+  :account-currency-code                  "AccountCurrencyCode"
+  :account-descriptive-name               "AccountDescriptiveName"
+  :account-time-zone-id                   "AccountTimeZoneId"
+  :active-view-cpm                        {:name "ActiveViewCpm" :parse parse-long}
+  :active-view-impressions                {:name "ActiveViewImpressions" :parse parse-long}
+  :ad-group-id                            "AdGroupId"
+  :ad-group-name                          "AdGroupName"
+  :ad-group-status                        "AdGroupStatus"
+  :ad-network-type-1                      "AdNetworkType1"
+  :ad-network-type-2                      "AdNetworkType2"
+  :advertiser-experiment-segmentation-bin "AdvertiserExperimentSegmentationBin"
+  :approval-status                        "ApprovalStatus"
+  :average-cpc                            {:name "AverageCpc" :parse parse-long}
+  :average-cpm                            {:name "AverageCpm" :parse parse-long}
+  :average-pageviews                      {:name "AveragePageviews" :parse parse-double}
+  :average-position                       {:name "AveragePosition" :parse parse-double}
+  :average-time-on-site                   {:name "AverageTimeOnSite" :parse parse-double}
+  :bid-type                               "BidType"
+  :bidding-strategy-id                    "BiddingStrategyId"
+  :bidding-strategy-name                  "BiddingStrategyName"
+  :bidding-strategy-type                  "BiddingStrategyType"
+  :bounce-rate                            {:name "BounceRate" :parse parse-double}
+  :campaign-id                            "CampaignId"
+  :campaign-name                          "CampaignName"
+  :campaign-status                        "CampaignStatus"
+  :click-assisted-conversion-value        {:name "ClickAssistedConversionValue" :parse parse-double}
+  :click-assisted-conversions             {:name "ClickAssistedConversions" :parse parse-long}
+  :click-assisted-conversions-over-last-click-conversions
+  {:name "ClickAssistedConversionsOverLastClickConversions"
+   :parse parse-double}
+  :click-type                             "ClickType"
+  :clicks                                 {:name "Clicks" :parse parse-long}
+  :conversion-category-name               "ConversionCategoryName"
+  :conversion-rate-many-per-click         {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :conversion-tracker-id                  "ConversionTrackerId"
+  :conversion-type-name                   "ConversionTypeName"
+  :conversion-value                       {:name "ConversionValue" :parse parse-double}
+  :conversions-many-per-click             {:name "ConversionsManyPerClick" :parse parse-long}
+  :cost                                   {:name "Cost" :parse parse-long}
+  :cost-per-conversion-many-per-click     {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-converted-click               {:name "CostPerConvertedClick" :parse parse-long}
+  :cpc-bid                                {:name "CpcBid" :parse parse-long}
+  :cpc-bid-source                         "CpcBidSource"
+  :cpm-bid                                "CpmBid"
+  :criteria-destination-url               "CriteriaDestinationUrl"
+  :ctr                                    {:name "Ctr" :parse parse-percentage}
+  :customer-descriptive-name              "CustomerDescriptiveName"
+  :date                                   "Date"
+  :day-of-week                            "DayOfWeek"
+  :device                                 "Device"
+  :enhanced-cpc-enabled                   "EnhancedCpcEnabled"
+  :external-customer-id                   "ExternalCustomerId"
+  :first-page-cpc                         {:name "FirstPageCpc" :parse parse-long}
+  :keyword-id                             "Id"
+  :impression-assisted-conversion-value   {:name "ImpressionAssistedConversionValue" :parse parse-double}
+  :impression-assisted-conversions        {:name "ImpressionAssistedConversions" :parse parse-long}
+  :impression-assisted-conversions-over-last-click-conversions "ImpressionAssistedConversionsOverLastClickConversions"
+  :impressions                            {:name "Impressions" :parse parse-long}
+  :is-negative                            "IsNegative"
+  :keyword-match-type                     "KeywordMatchType"
+  :keyword-text                           "KeywordText"
+  :label-ids                              "LabelIds"
+  :labels                                 "Labels"
+  :month                                  "Month"
+  :month-of-year                          "MonthOfYear"
+  :percent-new-visitors                   "PercentNewVisitors"
+  :placement-url                          "PlacementUrl"
+  :primary-company-name                   "PrimaryCompanyName"
+  :quality-score                          {:name "QualityScore" :parse parse-long}
+  :quarter                                "Quarter"
+  :search-exact-match-impression-share    {:name "SearchExactMatchImpressionShare" :parse parse-percentage}
+  :search-impression-share                {:name "SearchImpressionShare" :parse parse-percentage}
+  :search-rank-lost-impression-share      {:name "SearchRankLostImpressionShare" :parse parse-percentage}
+  :slot                                   "Slot"
+  :status                                 "Status"
+  :top-of-page-cpc                        "TopOfPageCpc"
+  :tracking-url-template                  "TrackingUrlTemplate"
+  :url-custom-parameters                  "UrlCustomParameters"
+  :value-per-conversion-many-per-click    {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-converted-click              {:name "ValuePerConvertedClick" :parse parse-double}
+  :view-through-conversions               {:name "ViewThroughConversions" :parse parse-double}
+  :week                                   "Week"
+  :year                                   "Year")
 
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
   :account-currency-code                 "AccountCurrencyCode"
