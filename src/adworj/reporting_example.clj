@@ -8,12 +8,11 @@
         session            (ar/reporting-session ads-properties credentials
                                                  :client-customer-id client-customer-id)]
     (with-open [report (ar/run session
-                         ar/keywords-performance
+                         ar/ad-performance
                          "sample report" :range (ar/date-range :last-week)
                          :selected-fields [:ad-group-id
                                            :ad-group-name
                                            :ad-group-status
-                                           :approval-status
                                            :average-cpc
                                            :average-cpm
                                            :average-position
@@ -22,19 +21,19 @@
                                            :campaign-status
                                            :click-type
                                            :clicks
+                                           :conversion-rate-many-per-click
                                            :conversions-many-per-click
+                                           :conversion-value
                                            :cost
                                            :cost-per-conversion-many-per-click
-                                           :cpc-bid
-                                           :cpm-bid
                                            :ctr
                                            :date
                                            :device
-                                           :first-page-cpc
+                                           :id
                                            :keyword-id
                                            :impressions
-                                           :keyword-text
-                                           :quality-score
-                                           :top-of-page-cpc])]
+                                           :headline
+                                           :description-1
+                                           :description-2])]
       (doseq [record (take 5 (ar/record-seq report))]
         (println (pr-str record))))))

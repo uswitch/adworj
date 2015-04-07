@@ -62,6 +62,7 @@
     ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT       false
     ReportDefinitionReportType/GEO_PERFORMANCE_REPORT          false
     ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT     false
+    ReportDefinitionReportType/AD_PERFORMANCE_REPORT           false
     true))
 
 
@@ -682,6 +683,98 @@
   :week                                 "Week"
   :year                                 "Year")
 
+(defreport ad-performance ReportDefinitionReportType/AD_PERFORMANCE_REPORT
+  :account-currency-code                                        "AccountCurrencyCode"
+  :account-descriptive-name                                     "AccountDescriptiveName"
+  :account-time-zone-id                                         "AccountTimeZoneId"
+  :ad-group-ad-disapproval-reasons                              "AdGroupAdDisapprovalReasons"
+  :ad-group-id                                                  "AdGroupId"
+  :ad-group-name                                                "AdGroupName"
+  :ad-group-status                                              "AdGroupStatus"
+  :ad-network-type-1                                            "AdNetworkType1"
+  :ad-network-type-2                                            "AdNetworkType2"
+  :ad-type                                                      "AdType"
+  :advertiser-experiment-segmentation-bin                       "AdvertiserExperimentSegmentationBin"
+  :average-cpc                                                  {:name "AverageCpc" :parse parse-long}
+  :average-cpm                                                  {:name "AverageCpm" :parse parse-long}
+  :average-pageviews                                            "AveragePageviews"
+  :average-position                                             {:name "AveragePosition" :parse parse-double}
+  :average-time-on-site                                         "AverageTimeOnSite"
+  :bounce-rate                                                  "BounceRate"
+  :campaign-id                                                  "CampaignId"
+  :campaign-name                                                "CampaignName"
+  :campaign-status                                              "CampaignStatus"
+  :click-assisted-conversion-value                              "ClickAssistedConversionValue"
+  :click-assisted-conversions                                   "ClickAssistedConversions"
+  :click-assisted-conversions-over-last-click-conversions       "ClickAssistedConversionsOverLastClickConversions"
+  :click-conversion-rate                                        "ClickConversionRate"
+  :click-conversion-rate-significance                           "ClickConversionRateSignificance"
+  :click-significance                                           "ClickSignificance"
+  :click-type                                                   "ClickType"
+  :clicks                                                       {:name "Clicks" :parse parse-long}
+  :conversion-category-name                                     "ConversionCategoryName"
+  :conversion-many-per-click-significance                       "ConversionManyPerClickSignificance"
+  :conversion-rate-many-per-click                               {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :conversion-rate-many-per-click-significance                  "ConversionRateManyPerClickSignificance"
+  :conversion-tracker-id                                        "ConversionTrackerId"
+  :conversion-type-name                                         "ConversionTypeName"
+  :conversion-value                                             {:name "ConversionValue" :parse parse-double}
+  :conversions-many-per-click                                   {:name "ConversionsManyPerClick" :parse parse-long}
+  :converted-clicks                                             {:name "ConvertedClicks" :parse parse-long}
+  :converted-clicks-significance                                "ConvertedClicksSignificance"
+  :cost                                                         {:name "Cost" :parse parse-long}
+  :cost-per-conversion-many-per-click                           {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-conversion-many-per-click-significance              "CostPerConversionManyPerClickSignificance"
+  :cost-significance                                            "CostSignificance"
+  :cpc-significance                                             "CpcSignificance"
+  :cpm-significance                                             "CpmSignificance"
+  :creative-approval-status                                     "CreativeApprovalStatus"
+  :creative-destination-url                                     "CreativeDestinationUrl"
+  :creative-final-app-urls                                      "CreativeFinalAppUrls"
+  :creative-final-mobile-urls                                   "CreativeFinalMobileUrls"
+  :creative-final-urls                                          "CreativeFinalUrls"
+  :creative-tracking-url-template                               "CreativeTrackingUrlTemplate"
+  :creative-url-custom-parameters                               "CreativeUrlCustomParameters"
+  :ctr                                                          {:name "Ctr" :parse parse-percentage}
+  :ctr-significance                                             "CtrSignificance"
+  :customer-descriptive-name                                    "CustomerDescriptiveName"
+  :date                                                         "Date"
+  :day-of-week                                                  "DayOfWeek"
+  :description-1                                                "Description1"
+  :description-2                                                "Description2"
+  :device                                                       "Device"
+  :device-preference                                            "DevicePreference"
+  :display-url                                                  "DisplayUrl"
+  :external-customer-id                                         "ExternalCustomerId"
+  :headline                                                     "Headline"
+  :id                                                           "Id"
+  :image-ad-url                                                 "ImageAdUrl"
+  :image-creative-name                                          "ImageCreativeName"
+  :impression-assisted-conversion-value                         {:name "ImpressionAssistedConversionValue" :parse parse-double}
+  :impression-assisted-conversions                              {:name "ImpressionAssistedConversions" :parse parse-long}
+  :impression-assisted-conversions-over-last-click-conversions  "ImpressionAssistedConversionsOverLastClickConversions"
+  :impression-significance                                      "ImpressionSignificance"
+  :impressions                                                  {:name "Impressions" :parse parse-long}
+  :is-negative                                                  "IsNegative"
+  :keyword-id                                                   "KeywordId"
+  :label-ids                                                    "LabelIds"
+  :labels                                                       "Labels"
+  :month                                                        "Month"
+  :month-of-year                                                "MonthOfYear"
+  :percent-new-visitors                                         "PercentNewVisitors"
+  :position-significance                                        "PositionSignificance"
+  :primary-company-name                                         "PrimaryCompanyName"
+  :quarter                                                      "Quarter"
+  :shared-set-name                                              "SharedSetName"
+  :slot                                                         "Slot"
+  :status                                                       "Status"
+  :trademarks                                                   "Trademarks"
+  :value-per-conversion-many-per-click                          {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-converted-click                                    {:name "ValuePerConvertedClick" :parse parse-double}
+  :view-through-conversions                                     "ViewThroughConversions"
+  :view-through-conversions-significance                        "ViewThroughConversionsSignificance"
+  :week                                                         "Week"
+  :year                                                         "Year")
 
 
 (defn configure-session-for-reporting
