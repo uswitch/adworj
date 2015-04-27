@@ -8,32 +8,17 @@
         session            (ar/reporting-session ads-properties credentials
                                                  :client-customer-id client-customer-id)]
     (with-open [report (ar/run session
-                         ar/ad-performance
+                         ar/account-performance
                          "sample report" :range (ar/date-range :last-week)
-                         :selected-fields [:ad-group-id
-                                           :ad-group-name
-                                           :ad-group-status
-                                           :average-cpc
-                                           :average-cpm
-                                           :average-position
-                                           :campaign-id
-                                           :campaign-name
-                                           :campaign-status
-                                           :click-type
-                                           :clicks
-                                           :conversion-rate-many-per-click
-                                           :conversions-many-per-click
-                                           :conversion-value
-                                           :cost
-                                           :cost-per-conversion-many-per-click
-                                           :ctr
-                                           :date
+                         :selected-fields [:account-descriptive-name
+                                           :ad-network-type-1
+                                           :ad-network-type-2
+                                           :conversion-category-name
+                                           :conversion-tracker-id
+                                           :conversion-type-name
                                            :device
-                                           :id
-                                           :keyword-id
-                                           :impressions
-                                           :headline
-                                           :description-1
-                                           :description-2])]
+                                           :date
+                                           :conversions
+                                           :conversion-rate-many-per-click])]
       (doseq [record (take 5 (ar/record-seq report))]
         (println (pr-str record))))))

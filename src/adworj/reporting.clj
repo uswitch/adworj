@@ -63,6 +63,7 @@
     ReportDefinitionReportType/GEO_PERFORMANCE_REPORT          false
     ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT     false
     ReportDefinitionReportType/AD_PERFORMANCE_REPORT           false
+    ReportDefinitionReportType/ACCOUNT_PERFORMANCE_REPORT      false
     true))
 
 
@@ -99,6 +100,48 @@
 
 (defn parse-percentage [s]
   (/ (Double/valueOf (re-find #"^[\d.]+" s)) 100))
+
+(defreport account-performance ReportDefinitionReportType/ACCOUNT_PERFORMANCE_REPORT
+  :account-currency-code              "AccountCurrencyCode"
+  :account-descriptive-name           "AccountDescriptiveName"
+  :account-time-zone-id               "AccountTimeZoneId"
+  :active-view-cpm                    {:name "ActiveViewCpm" :parse parse-long}
+  :active-view-impressions            {:name "ActiveViewImpressions" :parse parse-long}
+  :ad-network-type-1                  "AdNetworkType1"
+  :ad-network-type-2                  "AdNetworkType2"
+  :average-cpc                        {:name "AverageCpc" :parse parse-long}
+  :average-cpm                        {:name "AverageCpm" :parse parse-long}
+  :average-position                   {:name "AveragePosition" :parse parse-double}
+  :manage-clients?                    "CanManageClients"
+  :click-conversion-rate              {:name "ClickConversionRate" :parse parse-percentage}
+  :click-type                         "ClickType"
+  :clicks                             {:name "Clicks" :parse parse-long}
+  :conversions                        {:name "Conversions" :parse parse-long}
+  :conversion-category-name           "ConversionCategoryName"
+  :conversion-rate-many-per-click     {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :conversion-tracker-id              "ConversionTrackerId"
+  :conversion-type-name               "ConversionTypeName"
+  :conversion-value                   {:name "ConversionValue" :parse parse-double}
+  :conversions-many-per-click         {:name "ConversionsManyPerClick" :parse parse-long}
+  :cost                               {:name "Cost" :parse parse-long}
+  :cost-per-conversion-many-per-click {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-converted-click           {:name "CostPerConvertedClick" :parse parse-long}
+  :ctr                                {:name "Ctr" :parse parse-percentage}
+  :customer-descriptive-name          "CustomerDescriptiveName"
+  :date                               "Date"
+  :device                             "Device"
+  :estimated-cross-device-conversions {:name "EstimatedCrossDeviceConversions" :parse parse-long}
+  :estimated-total-conversion-rate    {:name "EstimatedTotalConversionRate" :parse parse-percentage}
+  :estimated-total-conversion-value   {:name "EstimatedTotalConversionValue" :parse parse-double}
+  :estimated-total-conversions        {:name "EstimatedTotalConversions" :parse parse-long}
+  :external-customer-id               "ExternalCustomerId"
+  :impressions                        "Impressions"
+  :invalid-click-rate                 {:name "InvalidClickRate" :parse parse-percentage}
+  :invalid-clicks                     {:name "InvalidClicks" :parse parse-long}
+  :auto-tagging?                      "IsAutoTaggingEnabled"
+  :test-account?                      "IsTestAccount"
+  :primary-company-name               "PrimaryCompanyName"
+  :slot                               "Slot")
 
 (defreport keywords-performance ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT
   :account-currency-code                  "AccountCurrencyCode"
