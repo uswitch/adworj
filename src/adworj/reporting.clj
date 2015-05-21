@@ -12,6 +12,8 @@
            [com.google.api.ads.adwords.lib.client.reporting ReportingConfiguration$Builder]
            [com.google.api.client.auth.oauth2 Credential]
            [com.google.api.ads.adwords.lib.utils.v201409 ReportDownloader DetailedReportDownloadResponseException]
+           [com.google.api.ads.adwords.axis.v201409.cm ReportDefinitionServiceInterface]
+           [com.google.api.ads.adwords.axis.factory AdWordsServices]
            [java.util.zip GZIPInputStream]))
 
 (def adwords-date-format (tf/formatter "yyyyMMdd"))
@@ -763,7 +765,7 @@
   :conversion-type-name                                         "ConversionTypeName"
   :conversion-value                                             {:name "ConversionValue" :parse parse-double}
   :conversions-many-per-click                                   {:name "ConversionsManyPerClick" :parse parse-long}
-  :converted-clicks                                             {:name "ConvertedClicks" :parse parse-long}
+  :converted-clicks                                             {:name "Conversions" :parse parse-long}
   :converted-clicks-significance                                "ConvertedClicksSignificance"
   :cost                                                         {:name "Cost" :parse parse-long}
   :cost-per-conversion-many-per-click                           {:name "CostPerConversionManyPerClick" :parse parse-long}
@@ -898,3 +900,17 @@
       java.io.Closeable
       (close [this]
         (.close r)))))
+
+
+
+
+(defn report-definition-service [session]
+  (let [adwords (AdWordsServices. )]
+    (.get adwords session ReportDefinitionServiceInterface)))
+
+(def report-type {:ad-performance com.google.api.ads.adwords.axis.v201409.cm.ReportDefinitionReportType/AD_PERFORMANCE_REPORT})
+
+(defn report-fields [service report-type]
+  (letfn [(to-clojure [report-field]
+            {:field-name (.getFieldName report-field)})]
+    (map to-clojure (.getReportFields service report-type))))
