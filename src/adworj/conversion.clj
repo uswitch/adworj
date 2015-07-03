@@ -1,7 +1,7 @@
 (ns adworj.conversion
   (:require [clj-time.core :as tc]
             [clj-time.format :as tf])
-  (:import [com.google.api.ads.adwords.axis.v201409.cm ApiError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator]
+  (:import [com.google.api.ads.adwords.axis.v201506.cm ApiError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]))
 
 
