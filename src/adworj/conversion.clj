@@ -1,7 +1,7 @@
 (ns adworj.conversion
   (:require [clj-time.core :as tc]
             [clj-time.format :as tf])
-  (:import [com.google.api.ads.adwords.axis.v201506.cm ApiError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
+  (:import [com.google.api.ads.adwords.axis.v201506.cm ApiError RateExceededError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]))
 
 
@@ -79,6 +79,14 @@
   (to-clojure [_]))
 
 (extend-protocol ToClojure
+  RateExceededError
+  (to-clojure [error] {:rate-name     (.getRateName error)
+                       :rate-scope    (.getRateScope error)
+                       :delay-seconds (.getRetryAfterSeconds error)
+                       :trigger       (.getTrigger error)
+                       :type          (.getApiErrorType error)
+                       :field-path    (.getFieldPath error)
+                       :error         (.getErrorString error)})
   ApiError
   (to-clojure [error] {:trigger    (.getTrigger error)
                        :type       (.getApiErrorType error)
