@@ -1,6 +1,7 @@
 (ns adworj.conversion
   (:require [clj-time.core :as tc]
-            [clj-time.format :as tf])
+            [clj-time.format :as tf]
+            [clojure.set :as s])
   (:import [com.google.api.ads.adwords.axis.v201506.cm ApiError RateExceededError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]))
 
@@ -119,7 +120,11 @@
         ops (map add-feed-op conversion-feeds)]
     (try {:conversions (to-clojure (.mutate service (into-array OfflineConversionFeedOperation ops)))}
          (catch ApiException e
-           (let [errs (map to-clojure (.getErrors e))]
-             {:errors (->> (.getErrors e)
+           (let [errs (->> (.getErrors e)
                            (map to-clojure)
-                           (decorate-errors conversion-feeds))})))))
+                           (decorate-errors conversion-feeds))
+                 failed (set (map :feed-index errs))
+                 all    (set (range (count conversion-feeds)))]
+             {:failed-indexes    failed
+              :succeeded-indexes (s/difference all failed)
+              :errors            errs})))))
