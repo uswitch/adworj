@@ -120,4 +120,6 @@
     (try {:conversions (to-clojure (.mutate service (into-array OfflineConversionFeedOperation ops)))}
          (catch ApiException e
            (let [errs (map to-clojure (.getErrors e))]
-             {:errors (decorate-errors conversion-feeds errs)})))))
+             {:errors (->> (.getErrors e)
+                           (map to-clojure)
+                           (decorate-errors conversion-feeds))})))))
