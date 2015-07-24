@@ -95,11 +95,23 @@
   OfflineConversionFeedReturnValue
   (to-clojure [return] (map to-clojure (.getValue return)))
   OfflineConversionFeed
-  (to-clojure [feed] {:gclid (.getGoogleClickId feed)
-                      :name  (.getConversionName feed)
-                      :time  (tf/parse conversion-time-format (.getConversionTime feed))
-                      :value (.getConversionValue feed)
+  (to-clojure [feed] {:gclid    (.getGoogleClickId feed)
+                      :name     (.getConversionName feed)
+                      :time     (tf/parse conversion-time-format (.getConversionTime feed))
+                      :value    (.getConversionValue feed)
                       :currency (.getConversionCurrencyCode feed)}))
+
+(defn- decorate-errors
+  [conversion-feeds errors]
+  (let [opidx #"operations\[(\d+)\].*"]
+    (letfn [(assoc-conversion [{:keys [field-path] :as error}]
+              (if-let [[_ index] (re-matches opidx field-path)]
+                (let [indexint (Integer/valueOf index)]
+                  (assoc error
+                    :feed-index indexint
+                    :conversion (nth conversion-feeds indexint)))
+                error))]
+      (map assoc-conversion errors))))
 
 (defn upload-conversions
   [session conversion-feeds]
@@ -107,4 +119,5 @@
         ops (map add-feed-op conversion-feeds)]
     (try {:conversions (to-clojure (.mutate service (into-array OfflineConversionFeedOperation ops)))}
          (catch ApiException e
-           {:errors (map to-clojure (.getErrors e))}))))
+           (let [errs (map to-clojure (.getErrors e))]
+             {:errors (decorate-errors conversion-feeds errs)})))))
