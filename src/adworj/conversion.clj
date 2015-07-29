@@ -1,7 +1,8 @@
 (ns adworj.conversion
   (:require [clj-time.core :as tc]
             [clj-time.format :as tf]
-            [clojure.set :as s])
+            [clojure.set :as s]
+            [clojure.string :as st])
   (:import [com.google.api.ads.adwords.axis.v201506.cm ApiError RateExceededError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]))
 
@@ -52,6 +53,8 @@
 
 (def conversion-time-format (tf/formatter "yyyyMMdd HHmmss Z"))
 
+(def provided? (complement st/blank?))
+
 (defn conversion-feed
   "represents an individual conversion event; associated to an ad click through
    the gclid (google click id) parameter"
@@ -59,6 +62,7 @@
                  :or   {time          (tc/now)
                         value         0.0
                         currency-code "GBP"}}]
+  {:pre [(provided? name) (provided? gclid)]}
   (doto (OfflineConversionFeed. )
     (.setConversionName name)
     (.setConversionTime (tf/unparse conversion-time-format time))
