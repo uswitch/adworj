@@ -122,7 +122,9 @@
   [session conversion-feeds]
   (let [service (conversion-feed-service session)
         ops (map add-feed-op conversion-feeds)]
-    (try {:conversions (to-clojure (.mutate service (into-array OfflineConversionFeedOperation ops)))}
+    (try {:conversions (to-clojure (.mutate service
+                                            (into-array OfflineConversionFeedOperation ops)))
+          :succeeded-indexes (range (count conversion-feeds))}
          (catch ApiException e
            (let [errs (->> (.getErrors e)
                            (map to-clojure)
