@@ -102,7 +102,8 @@
   OfflineConversionFeed
   (to-clojure [feed] {:gclid    (.getGoogleClickId feed)
                       :name     (.getConversionName feed)
-                      :time     (tf/parse conversion-time-format (.getConversionTime feed))
+                      :time     (when-let [time (.getConversionTime feed)]
+                                  (tf/parse conversion-time-format t))
                       :value    (.getConversionValue feed)
                       :currency (.getConversionCurrencyCode feed)}))
 
