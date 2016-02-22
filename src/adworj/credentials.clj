@@ -71,12 +71,16 @@
        (.build)
        (.generateCredential))))
 
-(defn adwords-session [config-file ^Credential credential & {:keys [client-customer-id]}]
+(defn adwords-session [config-file ^Credential credential & {:keys [client-customer-id user-agent enable-partial-failure?]}]
   (let [b (AdWordsSession$Builder. )]
     (.fromFile b config-file)
     (.withOAuth2Credential b credential)
     (when client-customer-id
       (.withClientCustomerId b client-customer-id))
+    (when user-agent
+      (.withUserAgent b user-agent))
+    (when enable-partial-failure?
+      (.enablePartialFailure b))
     (.build b)))
 
 
