@@ -98,7 +98,8 @@
                        :field-path (.getFieldPath error)
                        :error      (.getErrorString error)})
   OfflineConversionFeedReturnValue
-  (to-clojure [return] (map to-clojure (.getValue return)))
+  (to-clojure [return] {:conversions    (map to-clojure (.getValue return))
+                        :partial-errors (map to-clojure (.getPartialFailureErrors return))})
   OfflineConversionFeed
   (to-clojure [feed] {:gclid    (.getGoogleClickId feed)
                       :name     (.getConversionName feed)
@@ -119,19 +120,45 @@
                 error))]
       (map assoc-conversion errors))))
 
+(defn- drop-nth [n coll]
+  (keep-indexed #(if (not= %1 n) %2) coll))
+
+(defn- drop-indices [indices coll]
+  (reduce #(drop-nth %2 %1) coll indices))
+
 (defn upload-conversions
   [session conversion-feeds]
-  (let [service (conversion-feed-service session)
-        ops (map add-feed-op conversion-feeds)]
-    (try {:conversions (to-clojure (.mutate service
-                                            (into-array OfflineConversionFeedOperation ops)))
-          :succeeded-indexes (range (count conversion-feeds))}
-         (catch ApiException e
-           (let [errs (->> (.getErrors e)
-                           (map to-clojure)
-                           (decorate-errors conversion-feeds))
-                 failed (set (map :feed-index errs))
-                 all    (set (range (count conversion-feeds)))]
-             {:failed-indexes    failed
-              :succeeded-indexes (s/difference all failed)
-              :errors            errs})))))
+  (let [cvec    (vec conversion-feeds)
+        allidxs (range (count cvec))
+        service (conversion-feed-service session)
+        ops     (map add-feed-op cvec)]
+    (try
+      (let [response          (.mutate service
+                                       (into-array OfflineConversionFeedOperation ops))
+            partial-errors    (.getPartialFailureErrors response)
+            failed            (->> partial-errors (map to-clojure) (decorate-errors cvec))
+            failed-indices    (set (map :feed-index failed))
+            all               (set allidxs)
+            succeeded-indices (s/difference all failed-indices)]
+        {:cause             :success
+         :failed            (seq failed)
+         :failed-indices    failed-indices
+         :succeeded-indices succeeded-indices
+         :succeeded         (->> (.getValue response)
+                                 (map to-clojure)
+                                 (drop-indices failed-indices)
+                                 (seq))})
+      (catch ApiException e
+        (let [failed            (->> (.getErrors e)
+                                     (map to-clojure)
+                                     (decorate-errors cvec))
+              failed-indices    (set (map :feed-index failed))
+              all               (set allidxs)
+              succeeded-indices (s/difference all failed-indices)]
+          {:cause             e
+           :failed            (seq failed)
+           :failed-indices    failed-indices
+           :succeeded-indices succeeded-indices
+           :succeeded         (->> succeeded-indices
+                                   (map #(nth cvec %))
+                                   (seq))})))))
