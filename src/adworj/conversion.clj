@@ -152,13 +152,10 @@
         (let [failed            (->> (.getErrors e)
                                      (map to-clojure)
                                      (decorate-errors cvec))
-              failed-indices    (set (map :feed-index failed))
-              all               (set allidxs)
-              succeeded-indices (s/difference all failed-indices)]
-          {:cause             e
+              failed-indices    (set (->> failed
+                                          (map :feed-index)
+                                          (remove nil?)))]
+          {:errors            (map to-clojure (.getErrors e))
+           :cause             :error
            :failed            (seq failed)
-           :failed-indices    failed-indices
-           :succeeded-indices succeeded-indices
-           :succeeded         (->> succeeded-indices
-                                   (map #(nth cvec %))
-                                   (seq))})))))
+           :failed-indices    failed-indices})))))
