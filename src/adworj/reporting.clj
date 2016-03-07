@@ -66,6 +66,7 @@
     ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT     false
     ReportDefinitionReportType/AD_PERFORMANCE_REPORT           false
     ReportDefinitionReportType/ACCOUNT_PERFORMANCE_REPORT      false
+    ReportDefinitionReportType/CLICK_PERFORMANCE_REPORT        false
     true))
 
 
@@ -681,6 +682,22 @@
   :value-per-conversion-many-per-click  "ValuePerConversionManyPerClick"
   :week                                 "Week"
   :year                                 "Year")
+
+(defreport click-performance ReportDefinitionReportType/CLICK_PERFORMANCE_REPORT
+  :account-descriptive-name "AccountDescriptiveName"
+  :ad-group-id              "AdGroupId"
+  :ad-group-name            "AdGroupName"
+  :ad-group-status          "AdGroupStatus"
+  :campaign-id              "CampaignId"
+  :campaign-name            "CampaignName"
+  :campaign-status          "CampaignStatus"
+  :creative-id              "CreativeId"
+  :date                     "Date"
+  :device                   "Device"
+  :gclid                    "GclId"
+  :page                     "Page"
+  :slot                     "Slot"
+  :user-list-id             "UserListId")
 
 (defreport ad-performance ReportDefinitionReportType/AD_PERFORMANCE_REPORT
   :account-currency-code                                        "AccountCurrencyCode"
