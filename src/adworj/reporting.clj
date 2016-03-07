@@ -694,6 +694,7 @@
   :creative-id              "CreativeId"
   :date                     "Date"
   :device                   "Device"
+  :external-customer-id     "ExternalCustomerId"
   :gclid                    "GclId"
   :page                     "Page"
   :slot                     "Slot"
