@@ -8,17 +8,15 @@
         session            (ar/reporting-session ads-properties credentials
                                                  :client-customer-id client-customer-id)]
     (with-open [report (ar/run session
-                         ar/account-performance
+                         ar/keywords-performance
                          "sample report" :range (ar/date-range :last-week)
                          :selected-fields [:account-descriptive-name
                                            :ad-network-type-1
                                            :ad-network-type-2
-                                           :conversion-category-name
-                                           :conversion-tracker-id
-                                           :conversion-type-name
-                                           :device
                                            :date
-                                           :conversions
-                                           :conversion-rate-many-per-click])]
+                                           :criteria
+                                           :quality-score
+                                           :creative-quality-score
+                                           :post-click-quality-score])]
       (doseq [record (take 5 (ar/record-seq report))]
         (println (pr-str record))))))
