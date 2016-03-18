@@ -4,7 +4,8 @@
             [adworj.credentials :as ac]
             [clojure.data.csv :as csv]
             [clojure.set :as set]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [clojure.string :as s])
   (:import [com.google.api.ads.adwords.lib.jaxb.v201601 ReportDefinition ReportDefinitionReportType]
            [com.google.api.ads.adwords.lib.jaxb.v201601 DownloadFormat]
            [com.google.api.ads.adwords.lib.jaxb.v201601 DateRange Selector ReportDefinitionDateRangeType]
@@ -100,11 +101,14 @@
 (defmacro defreport [name type & field-mappings]
   `(def ~name (report-specification ~type ~@field-mappings)))
 
-(defn parse-long [s] (Long/valueOf s))
+(defn remove-thousandths-separator [s]
+  (s/replace s #"\," ""))
 
-(defn parse-int [s] (Integer/valueOf s))
+(defn parse-long [s] (Long/valueOf (remove-thousandths-separator s)))
 
-(defn parse-double [s] (Double/valueOf s))
+(defn parse-int [s] (Integer/valueOf (remove-thousandths-separator s)))
+
+(defn parse-double [s] (Double/valueOf (remove-thousandths-separator s)))
 
 (defn parse-percentage [s]
   (/ (Double/valueOf (re-find #"^[\d.]+" s)) 100))
