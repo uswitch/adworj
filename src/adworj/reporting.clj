@@ -121,7 +121,7 @@
   :clicks                              {:name "Clicks" :parse parse-long}
   :conversions                         {:name "ConvertedClicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate-many-per-click      {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
   :conversion-tracker-id               "ConversionTrackerId"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
@@ -179,11 +179,11 @@
   :click-assisted-conversions-over-last-click-conversions
   {:name "ClickAssistedConversionsOverLastClickConversions"
    :parse parse-double}
+  :conversion-rate                        {:name "ConversionRate" :parse parse-percentage}
   :click-conversion-rate                  {:name "ClickConversionRate" :parse parse-percentage}
   :click-type                             "ClickType"
   :clicks                                 {:name "Clicks" :parse parse-long}
   :conversion-category-name               "ConversionCategoryName"
-  :conversion-rate-many-per-click         {:name "ConversionRateManyPerClick" :parse parse-percentage}
   :conversion-tracker-id                  "ConversionTrackerId"
   :conversion-type-name                   "ConversionTypeName"
   :conversion-value                       {:name "ConversionValue" :parse parse-double}
@@ -292,7 +292,7 @@
   :conversions                         {:name "ConvertedClicks" :parse parse-long}
   :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
   :client-name                         "CustomerDescriptiveName"
-  :conversion-rate                     {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
   :cost                                {:name "Cost" :parse parse-long}
   :cost-per-conversion                 {:name "CostPerConvertedClick" :parse parse-long}
   :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
@@ -338,8 +338,8 @@
   :city-criteria-id                    "CityCriteriaId"
   :clicks                              {:name "Clicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate                     {:name "ClickConversionRate" :parse parse-percentage}
-  :conversion-rate-many-per-click      {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :click-conversion-rate               {:name "ClickConversionRate" :parse parse-percentage}
+  :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
   :conversion-tracker-id               "ConversionTrackerId"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
@@ -464,9 +464,8 @@
   :clicks                                          {:name "Clicks" :parse parse-long}
   :conversion-category-name                        "ConversionCategoryName"
   :conversion-many-per-click-significance          "ConversionManyPerClickSignificance"
-  :conversion-rate                                 {:name "ClickConversionRate" :parse parse-percentage}
-  :conversion-rate-many-per-click                  {:name "ConversionRateManyPerClick" :parse parse-percentage}
-  :conversion-rate-many-per-click-significance     "ConversionRateManyPerClickSignificance"
+  :conversion-rate                                 {:name "ConversionRate" :parse parse-percentage}
+  :click-conversion-rate                           {:name "ClickConversionRate" :parse parse-percentage}
   :conversion-rate-significance                    "ConversionRateSignificance"
   :conversion-significance                         "ConversionSignificance"
   :conversion-type-name                            "ConversionTypeName"
@@ -545,8 +544,8 @@
   :click-type                          "ClickType"
   :clicks                              "Clicks"
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate                     "ClickConversionRate"
-  :conversion-rate-many-per-click      "ConversionRateManyPerClick"
+  :conversion-rate                     "ConversionRate"
+  :click-conversion-rate               "ClickConversionRate"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    "ConversionValue"
   :conversions                         "ConvertedClicks"
@@ -602,8 +601,8 @@
   :click-type                          "ClickType"
   :clicks                              {:name "Clicks" :parse parse-long}
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate                     {:name "ClickConversionRate" :parse parse-percentage}
-  :conversion-rate-many-per-click      {:name "ConversionRateManyPerClick" :parse parse-percentage}
+  :click-conversion-rate               {:name "ClickConversionRate" :parse parse-percentage}
+  :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
   :conversions                         {:name "ConvertedClicks" :parse parse-long}
@@ -658,8 +657,8 @@
   :click-type                          "ClickType"
   :clicks                              "Clicks"
   :conversion-category-name            "ConversionCategoryName"
-  :conversion-rate                     "ClickConversionRate"
-  :conversion-rate-many-per-click      "ConversionRateManyPerClick"
+  :click-conversion-rate               "ClickConversionRate"
+  :conversion-rate                     "ConversionRate"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    "ConversionValue"
   :conversions                         "ConvertedClicks"
@@ -723,8 +722,8 @@
   :campaign-name                        "CampaignName"
   :clicks                               "Clicks"
   :conversion-category-name             "ConversionCategoryName"
-  :conversion-rate                      "ClickConversionRate"
-  :conversion-rate-many-per-click       "ConversionRateManyPerClick"
+  :click-conversion-rate                "ClickConversionRate"
+  :conversion-rate                      "ConversionRate"
   :conversion-type-name                 "ConversionTypeName"
   :conversion-value                     "ConversionValue"
   :conversions                          "ConvertedClicks"
@@ -800,8 +799,7 @@
   :clicks                                                       {:name "Clicks" :parse parse-long}
   :conversion-category-name                                     "ConversionCategoryName"
   :conversion-many-per-click-significance                       "ConversionManyPerClickSignificance"
-  :conversion-rate-many-per-click                               {:name "ConversionRateManyPerClick" :parse parse-percentage}
-  :conversion-rate-many-per-click-significance                  "ConversionRateManyPerClickSignificance"
+  :conversion-rate                                              {:name "ConversionRate" :parse parse-percentage}
   :conversion-tracker-id                                        "ConversionTrackerId"
   :conversion-type-name                                         "ConversionTypeName"
   :conversion-value                                             {:name "ConversionValue" :parse parse-double}
