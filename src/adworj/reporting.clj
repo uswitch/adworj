@@ -49,10 +49,15 @@
 
 (defn selected-field-names
   [report & fields]
-  {:pre [(set/subset? (set fields) (set (all-fields report)))]}
+  (let [selected  (set fields)
+        available (set (all-fields report))]
+    (when-not (set/subset? selected available)
+      (throw (ex-info "selected fields unavailable in report" {:selected  selected
+                                                               :available available
+                                                               :diff      (difference selected available)}))))
   (let [mappings (:field-mappings report)
         field-name (fn [field] (let [m (get mappings field)]
-                                 (if (string? m) m (:name m))))]
+                                (if (string? m) m (:name m))))]
     (map field-name fields)))
 
 (defn- selector []
