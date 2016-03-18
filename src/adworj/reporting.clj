@@ -192,10 +192,10 @@
   :conversion-tracker-id                  "ConversionTrackerId"
   :conversion-type-name                   "ConversionTypeName"
   :conversion-value                       {:name "ConversionValue" :parse parse-double}
-  :conversions-many-per-click             {:name "ConversionsManyPerClick" :parse parse-long}
-  :conversions                            {:name "ConvertedClicks" :parse parse-long}
+  :conversions                            {:name "Conversions" :parse parse-long}
+  :converted-clicks                       {:name "ConvertedClicks" :parse parse-long}
   :cost                                   {:name "Cost" :parse parse-long}
-  :cost-per-conversion-many-per-click     {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-conversion                    {:name "CostPerConversion" :parse parse-long}
   :cost-per-converted-click               {:name "CostPerConvertedClick" :parse parse-long}
   :cpc-bid                                "CpcBid"
   :cpc-bid-source                         "CpcBidSource"
@@ -238,7 +238,10 @@
   :value-per-converted-click              {:name "ValuePerConvertedClick" :parse parse-double}
   :view-through-conversions               {:name "ViewThroughConversions" :parse parse-double}
   :week                                   "Week"
-  :year                                   "Year")
+  :year                                   "Year"
+  :search-predicted-ctr                   "SearchPredictedCtr"
+  :creative-quality-score                 "CreativeQualityScore"
+  :post-click-quality-score               "PostClickQualityScore")
 
 (defreport paid-and-organic-query ReportDefinitionReportType/PAID_ORGANIC_QUERY_REPORT
   :account-currency-code                 "AccountCurrencyCode"
@@ -375,74 +378,6 @@
   :view-through-conversions            {:name "ViewThroughConversions" :parse parse-long}
   :week                                "Week"
   :year                                "Year")
-
-(defreport keywords-performance ReportDefinitionReportType/KEYWORDS_PERFORMANCE_REPORT
-  :account-currency-code                           "AccountCurrencyCode"
-  :account-descriptive-name                        "AccountDescriptiveName"
-  :account-time-zone-id                            "AccountTimeZoneId"
-  :ad-group-id                                     "AdGroupId"
-  :ad-group-name                                   "AdGroupName"
-  :ad-group-status                                 "AdGroupStatus"
-  :ad-network-type-1                               "AdNetworkType1"
-  :ad-network-type-2                               "AdNetworkType2"
-  :all-conversion-rate                             {:name "AllConversionRate" :parse parse-double}
-  :all-conversions                                 {:name "AllConversions" :parse parse-double}
-  :all-conversion-value                            {:name "AllConversionValue" :parse parse-double}
-  :approval-status                                 "ApprovalStatus"
-  :average-cost                                    "AverageCost"
-  :average-cpc                                     {:name "AverageCpc" :parse parse-long}
-  :average-cpe                                     {:name "AverageCpe" :parse parse-long}
-  :average-cpm                                     {:name "AverageCpm" :parse parse-long}
-  :average-cpv                                     {:name "AverageCpv" :parse parse-long}
-  :average-pageviews                               {:name "AveragePageviews" :parse parse-double}
-  :average-position                                {:name "AveragePosition" :parse parse-double}
-  :bid-type                                        "BidType"
-  :bounce-rate                                     {:name "BounceRate" :parse parse-double}
-  :campaign-id                                     "CampaignId"
-  :campaign-name                                   "CampaignName"
-  :campaign-status                                 "CampaignStatus"
-  :click-assisted-conversions                      {:name "ClickAssistedConversions" :parse parse-long}
-  :click-assisted-conversion-value                 {:name "ClickAssistedConversionValue" :parse parse-double}
-  :click-conversion-rate                           {:name "ClickConversionRate" :parse parse-double}
-  :clicks                                          {:name "Clicks" :parse parse-long}
-  :click-type                                      "ClickType"
-  :conversions                                     {:name "Conversions" :parse parse-long}
-  :conversion-tracker-id                           "ConversionTrackerId"
-  :conversion-type-name                            "ConversionTypeName"
-  :conversion-value                                "ConversionValue"
-  :converted-clicks                                {:name "ConvertedClicks" :parse parse-long}
-  :cost                                            {:name "Cost" :parse parse-long}
-  :cost-per-conversion                             {:name "CostPerConversion" :parse parse-long}
-  :cost-per-converted-click                        {:name "CostPerConvertedClick" :parse parse-long}
-  :cpc-bid                                         {:name "CpcBid" :parse parse-long}
-  :cpm-bid                                         {:name "CpmBid" :parse parse-long}
-  :creative-quality-score                          "CreativeQualityScore"
-  :criteria                                        "Criteria"
-  :criteria-destination-url                        "CriteriaDestinationUrl"
-  :cross-device-conversions                        {:name "CrossDeviceConversions" :parse parse-double}
-  :ctr                                             {:name "Ctr" :parse parse-double}
-  :customer-descriptive-name                       "CustomerDescriptiveName"
-  :date                                            "Date"
-  :device                                          "Device"
-  :enhanced-cpc-enabled                            "EnhancedCpcEnabled"
-  :estimated-additional-clicks-first-position      {:name "EstimatedAddClicksAtFirstPositionCpc" :parse parse-long}
-  :external-customer-id                            "ExternalCustomerId"
-  :first-page-cpc                                  "FirstPageCpc"
-  :first-position-cpc                              "FirstPositionCpc"
-  :id                                              "Id"
-  :impression-assisted-conversions                 {:name "ImpressionAssistedConversions" :parse parse-long}
-  :impression-assisted-conversion-value            {:name "ImpressionAssistedConversionValue" :parse parse-long}
-  :impressions                                     {:name "Impressions" :parse parse-long}
-  :interactions                                    {:name "Interactions" :parse parse-long}
-  :is-negative                                     "IsNegative"
-  :keyword-match-type                              "KeywordMatchType"
-  :post-click-quality-score                        "PostClickQualityScore"
-  :quality-score                                   "QualityScore"
-  :slot                                            "Slot"
-  :status                                          "Status"
-  :system-serving-status                           "SystemServingStatus"
-  :top-of-page-cpc                                 "TopOfPageCpc"
-  :view-through-conversions                        {:name "ViewThroughConversions" :parse parse-long})
 
 ;;https://developers.google.com/adwords/api/docs/appendix/reports#criteria
 (defreport criteria-performance ReportDefinitionReportType/CRITERIA_PERFORMANCE_REPORT
