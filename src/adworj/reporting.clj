@@ -54,7 +54,7 @@
     (when-not (set/subset? selected available)
       (throw (ex-info "selected fields unavailable in report" {:selected  selected
                                                                :available available
-                                                               :diff      (difference selected available)}))))
+                                                               :diff      (set/difference selected available)}))))
   (let [mappings (:field-mappings report)
         field-name (fn [field] (let [m (get mappings field)]
                                 (if (string? m) m (:name m))))]
