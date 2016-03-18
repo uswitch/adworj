@@ -257,7 +257,7 @@
   :impressions                           {:name "Impressions" :parse parse-long}
   :keyword-id                            "KeywordId"
   :keyword-text-matching-query           "KeywordTextMatchingQuery"
-  :match-type                            "MatchType"
+  :match-type                            "QueryMatchType"
   :organic-average-position              {:name "OrganicAveragePosition" :parse parse-double}
   :organic-clicks                        {:name "OrganicClicks" :parse parse-long}
   :organic-clicks-per-query              {:name "OrganicClicksPerQuery" :parse parse-percentage}
@@ -306,8 +306,7 @@
   :impressions                         {:name "Impressions" :parse parse-long}
   :keyword-id                          "KeywordId"
   :keyword-text-matching-query         "KeywordTextMatchingQuery"
-  :match-type                          "MatchType"
-  :match-type-with-variant             "MatchTypeWithVariant"
+  :match-type-with-variant             "QueryMatchTypeWithVariant"
   :month                               "Month"
   :month-of-year                       "MonthOfYear"
   :primary-company-name                "PrimaryCompanyName"
