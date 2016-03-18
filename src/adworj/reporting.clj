@@ -835,7 +835,11 @@
 (defn coerce-record [coercions m]
   (into m (for [[field coerce] coercions]
             (when-let [existing-value (field m)]
-              [field (coerce existing-value)]))))
+              (try [field (coerce existing-value)]
+                   (catch NumberFormatException e
+                     (throw (ex-info "error coercing record" {:field     field
+                                                              :coerceion coerce
+                                                              :raw       existing-value}))))))))
 
 (defn records
   "reads records from the input stream. returns a lazy sequence of
