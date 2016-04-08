@@ -844,6 +844,9 @@
                                                               :coerceion coerce
                                                               :raw       existing-value}))))))))
 
+(defn remove-empty-cell-dashes [s]
+  (s/replace s #"^--$" ""))
+
 (defn records
   "reads records from the input stream. returns a lazy sequence of
   records. converts records into clojure maps with their attributes
