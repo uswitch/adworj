@@ -6,14 +6,14 @@
             [clojure.set :as set]
             [clojure.java.io :as io]
             [clojure.string :as s])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201601 ReportDefinition ReportDefinitionReportType]
-           [com.google.api.ads.adwords.lib.jaxb.v201601 DownloadFormat]
-           [com.google.api.ads.adwords.lib.jaxb.v201601 DateRange Selector ReportDefinitionDateRangeType]
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201603 ReportDefinition ReportDefinitionReportType]
+           [com.google.api.ads.adwords.lib.jaxb.v201603 DownloadFormat]
+           [com.google.api.ads.adwords.lib.jaxb.v201603 DateRange Selector ReportDefinitionDateRangeType]
            [com.google.api.ads.adwords.lib.client AdWordsSession]
            [com.google.api.ads.adwords.lib.client.reporting ReportingConfiguration$Builder]
            [com.google.api.client.auth.oauth2 Credential]
-           [com.google.api.ads.adwords.lib.utils.v201601 ReportDownloader DetailedReportDownloadResponseException]
-           [com.google.api.ads.adwords.axis.v201601.cm ReportDefinitionServiceInterface]
+           [com.google.api.ads.adwords.lib.utils.v201603 ReportDownloader DetailedReportDownloadResponseException]
+           [com.google.api.ads.adwords.axis.v201603.cm ReportDefinitionServiceInterface]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]
            [java.util.zip GZIPInputStream]))
 
@@ -92,7 +92,6 @@
       (.setDateRangeType definition (:type range)))
     (.. sel getFields (addAll (apply selected-field-names report selected-fields)))
     (doto definition
-      (.setIncludeZeroImpressions (zero-impressionable? (:type report)))
       (.setSelector sel))))
 
 (defn report-specification [type & field-mappings]
@@ -140,9 +139,9 @@
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
   :conversions                         {:name "Conversions" :parse parse-double}
   :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-all-conversion             {:name "CostPerAllConversion" :parse parse-long}
   :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
   :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
-  :cost-per-estimated-conversion       {:name "CostPerEstimatedConversion" :parse parse-long}
   :ctr                                 {:name "Ctr" :parse parse-percentage}
   :customer-descriptive-name           "CustomerDescriptiveName"
   :date                                "Date"
@@ -806,11 +805,12 @@
 
 (defn configure-session-for-reporting
   "optimizes session configuration for reporting."
-  [^AdWordsSession adwords-session]
+  [^AdWordsSession adwords-session opts]
   (.setReportingConfiguration adwords-session
                               (-> (ReportingConfiguration$Builder. )
                                   (.skipReportHeader true)
                                   (.skipReportSummary true)
+                                  (.includeZeroImpressions (:include-zero-impressions opts false))
                                   (.build))))
 
 (defn reporting-session
@@ -818,7 +818,7 @@
   by credentials/adwords-session."
   [config-file ^Credential credential & opts]
   (doto (apply ac/adwords-session config-file credential opts)
-    (configure-session-for-reporting)))
+    (configure-session-for-reporting opts)))
 
 
 (defn report-stream
@@ -844,8 +844,8 @@
                                                               :coerceion coerce
                                                               :raw       existing-value}))))))))
 
-(defn remove-empty-cell-dashes [s]
-  (s/replace s #"^--$" ""))
+(defn remove-empty-cell-dashes [m]
+  (into {} (for [[k v] m] [k (when-not (re-find #"^--$" v) v)])))
 
 (defn records
   "reads records from the input stream. returns a lazy sequence of
@@ -860,7 +860,8 @@
     (->> (rest records) ;; drop header row
       (map (fn [cells]
              (apply array-map (interleave selected-fields cells))))
-      (map (partial coerce-record coercions)))))
+         (map remove-empty-cell-dashes)
+         (map (partial coerce-record coercions)))))
 
 (defn save-to-file
   "runs report and writes (uncompressed) csv data directly to out-file.
