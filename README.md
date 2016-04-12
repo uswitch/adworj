@@ -40,7 +40,8 @@ Having successfully authenticated, and updated the properties file with your con
 (def client-customer-id "123-456-7890")
 (def credentials        (ac/offline-credentials "./ads.properties"))
 (def session            (ar/reporting-session "./ads.properties" credentials
-                                              :client-customer-id client-customer-id))
+                                              :client-customer-id client-customer-id
+                                              :include-zero-impressions false))
 
 (with-open [report (ar/run session ar/paid-and-organic-query "sample report" :range (ar/date-range :last-week))]
   (doseq [record (ar/record-seq report)]
