@@ -121,6 +121,9 @@
   :active-view-impressions             {:name "ActiveViewImpressions" :parse parse-long}
   :ad-network-type-1                   "AdNetworkType1"
   :ad-network-type-2                   "AdNetworkType2"
+  :all-conversion-rate                 {:name "AllConversionRate" :parse parse-percentage}
+  :all-conversion-value                {:name "AllConversionValue" :parse parse-double}
+  :all-conversions                     {:name "AllConversions" :parse parse-long}
   :average-cpc                         {:name "AverageCpc" :parse parse-long}
   :average-cpm                         {:name "AverageCpm" :parse parse-long}
   :average-position                    {:name "AveragePosition" :parse parse-double}
@@ -135,9 +138,9 @@
   :conversion-tracker-id               "ConversionTrackerId"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
-  :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
+  :conversions                         {:name "Conversions" :parse parse-double}
   :cost                                {:name "Cost" :parse parse-long}
-  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
   :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
   :cost-per-estimated-conversion       {:name "CostPerEstimatedConversion" :parse parse-long}
   :ctr                                 {:name "Ctr" :parse parse-percentage}
@@ -146,9 +149,6 @@
   :hour                                {:name "HourOfDay" :parse parse-int}
   :device                              "Device"
   :estimated-cross-device-conversions  {:name "EstimatedCrossDeviceConversions" :parse parse-long}
-  :estimated-total-conversion-rate     {:name "EstimatedTotalConversionRate" :parse parse-percentage}
-  :estimated-total-conversion-value    {:name "EstimatedTotalConversionValue" :parse parse-double}
-  :estimated-total-conversions         {:name "EstimatedTotalConversions" :parse parse-long}
   :external-customer-id                "ExternalCustomerId"
   :impressions                         "Impressions"
   :invalid-click-rate                  {:name "InvalidClickRate" :parse parse-percentage}
@@ -239,7 +239,7 @@
   :top-of-page-cpc                        "TopOfPageCpc"
   :tracking-url-template                  "TrackingUrlTemplate"
   :url-custom-parameters                  "UrlCustomParameters"
-  :value-per-conversion-many-per-click    {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-conversion    {:name "ValuePerConversion" :parse parse-double}
   :value-per-converted-click              {:name "ValuePerConvertedClick" :parse parse-double}
   :view-through-conversions               {:name "ViewThroughConversions" :parse parse-double}
   :week                                   "Week"
@@ -270,7 +270,6 @@
   :impressions                           {:name "Impressions" :parse parse-long}
   :keyword-id                            "KeywordId"
   :keyword-text-matching-query           "KeywordTextMatchingQuery"
-  :match-type                            "QueryMatchType"
   :organic-average-position              {:name "OrganicAveragePosition" :parse parse-double}
   :organic-clicks                        {:name "OrganicClicks" :parse parse-long}
   :organic-clicks-per-query              {:name "OrganicClicksPerQuery" :parse parse-percentage}
@@ -278,6 +277,7 @@
   :organic-impressions-per-query         {:name "OrganicImpressionsPerQuery" :parse parse-double}
   :organic-queries                       {:name "OrganicQueries" :parse parse-long}
   :primary-company-name                  "PrimaryCompanyName"
+  :query-match-type                      "QueryMatchType"
   :search-query                          "SearchQuery"
   :serp-type                             "SerpType")
 
@@ -304,12 +304,11 @@
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
   :conversions                         {:name "Conversions" :parse parse-double}
   :converted-clicks                    {:name "ConvertedClicks" :parse parse-long}
-  :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
   :client-name                         "CustomerDescriptiveName"
   :conversion-rate                     {:name "ConversionRate" :parse parse-percentage}
   :cost                                {:name "Cost" :parse parse-long}
-  :cost-per-conversion                 {:name "CostPerConvertedClick" :parse parse-long}
-  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
   :creative-id                         "CreativeId"
   :ctr                                 {:name "Ctr" :parse parse-percentage}
   :date                                "Date"
@@ -320,14 +319,14 @@
   :impressions                         {:name "Impressions" :parse parse-long}
   :keyword-id                          "KeywordId"
   :keyword-text-matching-query         "KeywordTextMatchingQuery"
-  :match-type-with-variant             "QueryMatchTypeWithVariant"
+  :query-match-type-with-variant       "QueryMatchTypeWithVariant"
   :month                               "Month"
   :month-of-year                       "MonthOfYear"
   :primary-company-name                "PrimaryCompanyName"
   :quarter                             "Quarter"
   :query                               "Query"
-  :value-per-conversion                {:name "ValuePerConvertedClick" :parse parse-double}
-  :value-per-conversion-many-per-click {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-converted-click           {:name "ValuePerConvertedClick" :parse parse-double}
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions            {:name "ViewThroughConversions" :parse parse-long}
   :week                                "Week"
   :year                                "Year")
@@ -360,8 +359,8 @@
   :conversions                         {:name "Conversions" :parse parse-double}
   :converted-clicks                    {:name "ConvertedClicks" :parse parse-long}
   :cost                                {:name "Cost" :parse parse-long}
-  :cost-per-conversion                 {:name "CostPerConvertedClick" :parse parse-double}
-  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
   :country-criteria-id                 "CountryCriteriaId"
   :ctr                                 {:name "Ctr" :parse parse-percentage}
   :customer-descriptive-name           "CustomerDescriptiveName"
@@ -380,7 +379,7 @@
   :quarter                             "Quarter"
   :region-criteria-id                  "RegionCriteriaId"
   :value-per-conversion                {:name "ValuePerConvertedClick" :parse parse-double}
-  :value-per-conversion-many-per-click {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions            {:name "ViewThroughConversions" :parse parse-long}
   :week                                "Week"
   :year                                "Year")
@@ -405,25 +404,23 @@
   :campaign-id                                     "CampaignId"
   :campaign-name                                   "CampaignName"
   :campaign-status                                 "CampaignStatus"
+  :click-conversion-rate                           {:name "ClickConversionRate" :parse parse-percentage}
+  :click-conversion-rate-significance              "ClickConversionRateSignificance"
   :click-significance                              "ClickSignificance"
   :click-type                                      "ClickType"
   :clicks                                          {:name "Clicks" :parse parse-long}
   :conversion-category-name                        "ConversionCategoryName"
-  :conversion-many-per-click-significance          "ConversionManyPerClickSignificance"
   :conversion-rate                                 {:name "ConversionRate" :parse parse-percentage}
-  :click-conversion-rate                           {:name "ClickConversionRate" :parse parse-percentage}
-  :conversion-rate-significance                    "ConversionRateSignificance"
-  :conversion-significance                         "ConversionSignificance"
   :conversion-type-name                            "ConversionTypeName"
   :conversion-value                                "ConversionValue"
   :conversions                                     {:name "Conversions" :parse parse-double}
   :converted-clicks                                {:name "ConvertedClicks" :parse parse-long}
+  :converted-clicks-significance                   "ConvertedClicksSignificance"
   :cost                                            {:name "Cost" :parse parse-long}
-  :cost-per-conversion                             {:name "CostPerConvertedClick" :parse parse-long}
-  :cost-per-conversion-many-per-click              {:name "CostPerConversionManyPerClick" :parse parse-long}
-  :cost-per-conversion-many-per-click-significance "CostPerConversionManyPerClickSignificance"
-  :cost-per-conversion-significance                "CostPerConversionSignificance"
-  :cost-significance                               "CostSignificance"
+  :cost-per-converted-click                        {:name "CostPerConvertedClick" :parse parse-long}
+  :cost-per-conversion                             {:name "CostPerConversion" :parse parse-long}
+  :cost-per-converted-click-significance           {:name "CostPerConvertedClickSignificance" :parse parse-long}
+  :cost-significance                               {:name "CostSignificance" :parse parse-long}
   :cpc-bid                                         {:name "CpcBid" :parse parse-long}
   :cpc-bid-source                                  "CpcBidSource"
   :cpc-significance                                "CpcSignificance"
@@ -464,7 +461,7 @@
   :tracking-url-template                           "TrackingUrlTemplate"
   :url-custom-parameters                           "UrlCustomParameters"
   :value-per-conversion                            {:name "ValuePerConvertedClick" :parse parse-double}
-  :value-per-conversion-many-per-click             "ValuePerConversionManyPerClick"
+  :value-per-conversion                            {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions                        {:name "ViewThroughConversions" :parse parse-long}
   :view-through-conversions-significance           "ViewThroughConversionsSignificance"
   :week                                            "Week"
@@ -494,11 +491,11 @@
   :click-conversion-rate               "ClickConversionRate"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    "ConversionValue"
-  :conversions                         "ConvertedClicks"
-  :conversions-many-per-click          "ConversionsManyPerClick"
-  :cost                                "Cost"
-  :cost-per-conversion                 "CostPerConvertedClick"
-  :cost-per-conversion-many-per-click  "CostPerConversionManyPerClick"
+  :conversions                         "Conversions"
+  :converted-clicks                    "ConvertedClicks"
+  :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
+  :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
   :cpc-bid                             "CpcBid"
   :cpc-bid-source                      "CpcBidSource"
   :cpm-bid                             "CpmBid"
@@ -521,8 +518,8 @@
   :primary-company-name                "PrimaryCompanyName"
   :quarter                             "Quarter"
   :status                              "Status"
-  :value-per-conversion                "ValuePerConvertedClick"
-  :value-per-conversion-many-per-click "ValuePerConversionManyPerClick"
+  :value-per-conversion                {:name "ValuePerConvertedClick" :parse parse-double}
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions            "ViewThroughConversions"
   :week                                "Week"
   :year                                "Year")
@@ -553,10 +550,9 @@
   :conversion-value                    {:name "ConversionValue" :parse parse-double}
   :conversions                         {:name "Conversions" :parse parse-double}
   :converted-clicks                    {:name "ConvertedClicks" :parse parse-long}
-  :conversions-many-per-click          {:name "ConversionsManyPerClick" :parse parse-long}
   :cost                                {:name "Cost" :parse parse-long}
-  :cost-per-conversion                 {:name "CostPerConvertedClick" :parse parse-long}
-  :cost-per-conversion-many-per-click  {:name "CostPerConversionManyPerClick" :parse parse-long}
+  :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
   :cpc-bid                             "CpcBid"
   :cpc-bid-source                      "CpcBidSource"
   :cpm-bid                             "CpmBid"
@@ -581,7 +577,7 @@
   :slot                                "Slot"
   :status                              "Status"
   :value-per-conversion                {:name "ValuePerConvertedClick" :parse parse-double}
-  :value-per-conversion-many-per-click {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions            "ViewThroughConversions"
   :week                                "Week"
   :year                                "Year")
@@ -608,11 +604,11 @@
   :conversion-rate                     "ConversionRate"
   :conversion-type-name                "ConversionTypeName"
   :conversion-value                    "ConversionValue"
-  :conversions                         "ConvertedClicks"
-  :conversions-many-per-click          "ConversionsManyPerClick"
-  :cost                                "Cost"
-  :cost-per-conversion                 "CostPerConvertedClick"
-  :cost-per-conversion-many-per-click  "CostPerConversionManyPerClick"
+  :conversions                         "Conversions"
+  :converted-clicks                    "ConvertedClicks"
+  :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
+  :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
   :ctr                                 "Ctr"
   :customer-descriptive-name           "CustomerDescriptiveName"
   :date                                "Date"
@@ -638,8 +634,8 @@
   :status                              "Status"
   :url-custom-parameters               "UrlCustomParameters"
   :validation-details                  "ValidationDetails"
-  :value-per-conversion                "ValuePerConvertedClick"
-  :value-per-conversion-many-per-click "ValuePerConversionManyPerClick"
+  :value-per-conversion                {:name "ValuePerConvertedClick" :parse parse-double}
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
   :week                                "Week"
   :year                                "Year")
 
@@ -673,11 +669,11 @@
   :conversion-rate                      "ConversionRate"
   :conversion-type-name                 "ConversionTypeName"
   :conversion-value                     "ConversionValue"
-  :conversions                          "ConvertedClicks"
-  :conversions-many-per-click           "ConversionsManyPerClick"
-  :cost                                 "Cost"
-  :cost-per-conversion                  "CostPerConvertedClick"
-  :cost-per-conversion-many-per-click   "CostPerConversionManyPerClick"
+  :conversions                          "Conversions"
+  :converted-clicks                     "ConvertedClicks"
+  :cost                                {:name "Cost" :parse parse-long}
+  :cost-per-conversion                 {:name "CostPerConversion" :parse parse-long}
+  :cost-per-converted-click            {:name "CostPerConvertedClick" :parse parse-long}
   :ctr                                  "Ctr"
   :date                                 "Date"
   :day-of-week                          "DayOfWeek"
@@ -693,8 +689,8 @@
   :month-of-year                        "MonthOfYear"
   :quarter                              "Quarter"
   :slot                                 "Slot"
-  :value-per-conversion                 "ValuePerConvertedClick"
-  :value-per-conversion-many-per-click  "ValuePerConversionManyPerClick"
+  :value-per-conversion                {:name "ValuePerConvertedClick" :parse parse-double}
+  :value-per-conversion                {:name "ValuePerConversion" :parse parse-double}
   :week                                 "Week"
   :year                                 "Year")
 
@@ -745,7 +741,6 @@
   :click-type                                                   "ClickType"
   :clicks                                                       {:name "Clicks" :parse parse-long}
   :conversion-category-name                                     "ConversionCategoryName"
-  :conversion-many-per-click-significance                       "ConversionManyPerClickSignificance"
   :conversion-rate                                              {:name "ConversionRate" :parse parse-percentage}
   :conversion-tracker-id                                        "ConversionTrackerId"
   :conversion-type-name                                         "ConversionTypeName"
@@ -754,8 +749,9 @@
   :converted-clicks                                             {:name "ConvertedClicks" :parse parse-long}
   :converted-clicks-significance                                "ConvertedClicksSignificance"
   :cost                                                         {:name "Cost" :parse parse-long}
-  :cost-per-conversion-many-per-click                           {:name "CostPerConversionManyPerClick" :parse parse-long}
-  :cost-per-conversion-many-per-click-significance              "CostPerConversionManyPerClickSignificance"
+  :cost-per-conversion                                          {:name "CostPerConversion" :parse parse-long}
+  :cost-per-converted-click                                     {:name "CostPerConvertedClick" :parse parse-long}
+  :cost-per-converted-click-significance                        "CostPerConvertedClickSignificance"
   :cost-significance                                            "CostSignificance"
   :cpc-significance                                             "CpcSignificance"
   :cpm-significance                                             "CpmSignificance"
@@ -800,7 +796,7 @@
   :slot                                                         "Slot"
   :status                                                       "Status"
   :trademarks                                                   "Trademarks"
-  :value-per-conversion-many-per-click                          {:name "ValuePerConversionManyPerClick" :parse parse-double}
+  :value-per-conversion                                         {:name "ValuePerConversion" :parse parse-double}
   :value-per-converted-click                                    {:name "ValuePerConvertedClick" :parse parse-double}
   :view-through-conversions                                     "ViewThroughConversions"
   :view-through-conversions-significance                        "ViewThroughConversionsSignificance"
