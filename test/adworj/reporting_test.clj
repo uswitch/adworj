@@ -2,8 +2,8 @@
   (:require [adworj.reporting :as r]
             [clj-time.format :as tf]
             [clojure.test :refer :all])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201601 ReportDefinitionDateRangeType]
-           [com.google.api.ads.adwords.lib.jaxb.v201601 ReportDefinitionReportType]))
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201603 ReportDefinitionDateRangeType]
+           [com.google.api.ads.adwords.lib.jaxb.v201603 ReportDefinitionReportType]))
 
 (deftest report-specification-test
   (let [d (r/report-definition r/search-query-performance
@@ -25,11 +25,7 @@
          (.getReportType (r/report-definition r/search-query-performance
                                "testing"
                                (r/date-range :last-week)
-                               (r/all-fields r/search-query-performance))))
-  (is (false? (.isIncludeZeroImpressions (r/report-definition r/search-query-performance
-                                                              "testing"
-                                                              (r/date-range :last-week)
-                                                              (r/all-fields r/search-query-performance)))))))
+                               (r/all-fields r/search-query-performance))))))
 
 (deftest report-field-mapping-test
   (is (= "AdGroupName"  (get-in r/search-query-performance [:field-mappings :ad-group-name]) )))
