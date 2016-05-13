@@ -103,9 +103,6 @@
 (defn remove-thousandths-separator [s]
   (s/replace s #"\," ""))
 
-(defn empty-value? [s]
-  (= " --" s))
-
 (defn parse-long [s] (Long/valueOf (remove-thousandths-separator s)))
 
 (defn parse-int [s] (Integer/valueOf (remove-thousandths-separator s)))
@@ -841,9 +838,7 @@
 (defn coerce-record [coercions m]
   (into m (for [[field coerce] coercions]
             (when-let [existing-value (field m)]
-              (try [field (if-not (empty-value? existing-value)
-                            (coerce existing-value)
-                            nil)]
+              (try [field (coerce existing-value)]
                    (catch NumberFormatException e
                      (throw (ex-info "error coercing record" {:field     field
                                                               :coerceion coerce
@@ -851,7 +846,7 @@
                                                               :raw       existing-value}))))))))
 
 (defn remove-empty-cell-dashes [m]
-  (into {} (for [[k v] m] [k (when-not (re-find #"^--$" v) v)])))
+  (into {} (for [[k v] m] [k (when-not (re-find #"--$" v) v)])))
 
 (defn records
   "reads records from the input stream. returns a lazy sequence of
@@ -864,8 +859,8 @@
   [reader selected-fields coercions]
   (let [records (csv/read-csv reader)]
     (->> (rest records) ;; drop header row
-      (map (fn [cells]
-             (apply array-map (interleave selected-fields cells))))
+         (map (fn [cells]
+                (apply array-map (interleave selected-fields cells))))
          (map remove-empty-cell-dashes)
          (map (partial coerce-record coercions)))))
 
