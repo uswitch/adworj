@@ -103,6 +103,9 @@
 (defn remove-thousandths-separator [s]
   (s/replace s #"\," ""))
 
+(defn empty-value? [s]
+  (= " --" s))
+
 (defn parse-long [s] (Long/valueOf (remove-thousandths-separator s)))
 
 (defn parse-int [s] (Integer/valueOf (remove-thousandths-separator s)))
@@ -838,10 +841,13 @@
 (defn coerce-record [coercions m]
   (into m (for [[field coerce] coercions]
             (when-let [existing-value (field m)]
-              (try [field (coerce existing-value)]
+              (try [field (if-not (empty-value? existing-value)
+                            (coerce existing-value)
+                            nil)]
                    (catch NumberFormatException e
                      (throw (ex-info "error coercing record" {:field     field
                                                               :coerceion coerce
+                                                              :original  m
                                                               :raw       existing-value}))))))))
 
 (defn remove-empty-cell-dashes [m]
