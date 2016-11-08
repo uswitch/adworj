@@ -2,8 +2,8 @@
   (:require [adworj.reporting :as r]
             [clj-time.format :as tf]
             [clojure.test :refer :all])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201603 ReportDefinitionDateRangeType]
-           [com.google.api.ads.adwords.lib.jaxb.v201603 ReportDefinitionReportType]))
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201609 ReportDefinitionDateRangeType]
+           [com.google.api.ads.adwords.lib.jaxb.v201609 ReportDefinitionReportType]))
 
 (deftest report-specification-test
   (let [d (r/report-definition r/search-query-performance
@@ -20,7 +20,7 @@
     (is (= ReportDefinitionDateRangeType/CUSTOM_DATE (.getDateRangeType d)))
     (is (= "20150101" (.. d getSelector getDateRange getMin)))
     (is (= "20150102" (.. d getSelector getDateRange getMax)))
-    (is (= 48 (count (.. d getSelector getFields)))))
+    (is (= 42 (count (.. d getSelector getFields)))))
   (is (= ReportDefinitionReportType/SEARCH_QUERY_PERFORMANCE_REPORT
          (.getReportType (r/report-definition r/search-query-performance
                                "testing"
@@ -31,9 +31,8 @@
   (is (= "AdGroupName"  (get-in r/search-query-performance [:field-mappings :ad-group-name]) )))
 
 (deftest report-field-names-test
-  (is (= 48 (count (r/all-fields r/search-query-performance))))
+  (is (= 42 (count (r/all-fields r/search-query-performance))))
   (is (= :account-currency-code (first (r/all-fields r/search-query-performance)))))
 
 (deftest coercions-test
   (is (= {:bar "baz" :foo 1} (r/coerce-record {:foo (constantly 1)} {:foo "123" :bar "baz"}))))
-  
