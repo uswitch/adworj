@@ -162,7 +162,6 @@
   :ad-group-status                        "AdGroupStatus"
   :ad-network-type-1                      "AdNetworkType1"
   :ad-network-type-2                      "AdNetworkType2"
-  :advertiser-experiment-segmentation-bin "AdvertiserExperimentSegmentationBin"
   :approval-status                        "ApprovalStatus"
   :average-cpc                            {:name "AverageCpc" :parse parse-long}
   :average-cpm                            {:name "AverageCpm" :parse parse-long}
@@ -367,7 +366,6 @@
   :ad-group-status                                 "AdGroupStatus"
   :ad-network-type-1                               "AdNetworkType1"
   :ad-network-type-2                               "AdNetworkType2"
-  :advertiser-experiment-segmentation-bin          "AdvertiserExperimentSegmentationBin"
   :approval-status                                 "ApprovalStatus"
   :average-cpc                                     {:name "AverageCpc" :parse parse-long}
   :average-cpm                                     {:name "AverageCpm" :parse parse-long}
@@ -386,14 +384,11 @@
   :cost-per-conversion                             {:name "CostPerConversion" :parse parse-long}
   :cpc-bid                                         {:name "CpcBid" :parse parse-long}
   :cpc-bid-source                                  "CpcBidSource"
-  :cpc-significance                                "CpcSignificance"
   :cpm-bid                                         "CpmBid"
-  :cpm-significance                                "CpmSignificance"
   :criteria                                        "Criteria"
   :criteria-destination-url                        "CriteriaDestinationUrl"
   :criteria-type                                   "CriteriaType"
   :ctr                                             {:name "Ctr" :parse parse-percentage}
-  :ctr-significance                                "CtrSignificance"
   :customer-descriptive-name                       "CustomerDescriptiveName"
   :date                                            "Date"
   :day-of-week                                     "DayOfWeek"
@@ -407,7 +402,6 @@
   :first-page-cpc                                  {:name "FirstPageCpc" :parse parse-long}
   :has-quality-score                               "HasQualityScore"
   :id                                              "Id"
-  :impression-significance                         "ImpressionSignificance"
   :impressions                                     {:name "Impressions" :parse parse-long}
   :is-negative                                     "IsNegative"
   :label-ids                                       "LabelIds"
@@ -415,7 +409,6 @@
   :month                                           "Month"
   :month-of-year                                   "MonthOfYear"
   :parameter                                       "Parameter"
-  :position-significance                           "PositionSignificance"
   :primary-company-name                            "CompanyName"
   :quality-score                                   {:name "QualityScore" :parse parse-long}
   :quarter                                         "Quarter"
@@ -426,7 +419,6 @@
   :url-custom-parameters                           "UrlCustomParameters"
   :value-per-conversion                            {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions                        {:name "ViewThroughConversions" :parse parse-long}
-  :view-through-conversions-significance           "ViewThroughConversionsSignificance"
   :week                                            "Week"
   :year                                            "Year"
   :creative-quality-score                          "CreativeQualityScore")
@@ -661,7 +653,6 @@
   :ad-network-type-1                                            "AdNetworkType1"
   :ad-network-type-2                                            "AdNetworkType2"
   :ad-type                                                      "AdType"
-  :advertiser-experiment-segmentation-bin                       "AdvertiserExperimentSegmentationBin"
   :average-cpc                                                  {:name "AverageCpc" :parse parse-long}
   :average-cpm                                                  {:name "AverageCpm" :parse parse-long}
   :average-pageviews                                            "AveragePageviews"
@@ -690,7 +681,6 @@
   :creative-url-custom-parameters                               "CreativeUrlCustomParameters"
   :criterion-id                                                 "CriterionId"
   :ctr                                                          {:name "Ctr" :parse parse-percentage}
-  :ctr-significance                                             "CtrSignificance"
   :customer-descriptive-name                                    "CustomerDescriptiveName"
   :date                                                         "Date"
   :day-of-week                                                  "DayOfWeek"
@@ -707,7 +697,6 @@
   :impression-assisted-conversion-value                         {:name "ImpressionAssistedConversionValue" :parse parse-double}
   :impression-assisted-conversions                              {:name "ImpressionAssistedConversions" :parse parse-long}
   :impression-assisted-conversions-over-last-click-conversions  "ImpressionAssistedConversionsOverLastClickConversions"
-  :impression-significance                                      "ImpressionSignificance"
   :impressions                                                  {:name "Impressions" :parse parse-long}
   :is-negative                                                  "IsNegative"
   :label-ids                                                    "LabelIds"
@@ -715,7 +704,6 @@
   :month                                                        "Month"
   :month-of-year                                                "MonthOfYear"
   :percent-new-visitors                                         "PercentNewVisitors"
-  :position-significance                                        "PositionSignificance"
   :primary-company-name                                         "PrimaryCompanyName"
   :quarter                                                      "Quarter"
   :shared-set-name                                              "SharedSetName"
@@ -724,7 +712,6 @@
   :trademarks                                                   "Trademarks"
   :value-per-conversion                                         {:name "ValuePerConversion" :parse parse-double}
   :view-through-conversions                                     "ViewThroughConversions"
-  :view-through-conversions-significance                        "ViewThroughConversionsSignificance"
   :week                                                         "Week"
   :year                                                         "Year")
 
