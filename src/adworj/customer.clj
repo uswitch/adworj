@@ -9,7 +9,7 @@
     (.get services adwords-session CustomerServiceInterface)))
 
 (defn customer [customer-service]
-  (let [c (.get customer-service)]
+  (let [c (.getCustomers customer-service)]
     (map->Customer {:company-name          (.getCompanyName c)
                     :currency-code         (.getCurrencyCode c)
                     :customer-id           (.getCustomerId c)
