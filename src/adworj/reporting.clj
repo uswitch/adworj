@@ -631,7 +631,7 @@
   :ad-group-name            "AdGroupName"
   :ad-group-status          "AdGroupStatus"
   :campaign-id              "CampaignId"
-  :campaign-name            "CampaignNamecriterion"
+  :campaign-name            "CampaignName"
   :campaign-status          "CampaignStatus"
   :creative-id              "CreativeId"
   :date                     "Date"
