@@ -1,5 +1,5 @@
 (ns adworj.customer
-  (:import [com.google.api.ads.adwords.axis.v201506.mcm CustomerServiceInterface]
+  (:import [com.google.api.ads.adwords.axis.v201705.mcm CustomerServiceInterface]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]))
 
 (defrecord Customer [company-name currency-code customer-id date-time-zone descriptive-name tracking-url-template test-account?])

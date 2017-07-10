@@ -6,14 +6,14 @@
             [clojure.set :as set]
             [clojure.java.io :as io]
             [clojure.string :as s])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201609 ReportDefinition ReportDefinitionReportType]
-           [com.google.api.ads.adwords.lib.jaxb.v201609 DownloadFormat]
-           [com.google.api.ads.adwords.lib.jaxb.v201609 DateRange Selector ReportDefinitionDateRangeType]
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201705 ReportDefinition ReportDefinitionReportType]
+           [com.google.api.ads.adwords.lib.jaxb.v201705 DownloadFormat]
+           [com.google.api.ads.adwords.lib.jaxb.v201705 DateRange Selector ReportDefinitionDateRangeType]
            [com.google.api.ads.adwords.lib.client AdWordsSession]
            [com.google.api.ads.adwords.lib.client.reporting ReportingConfiguration$Builder]
            [com.google.api.client.auth.oauth2 Credential]
-           [com.google.api.ads.adwords.lib.utils.v201609 ReportDownloader DetailedReportDownloadResponseException]
-           [com.google.api.ads.adwords.axis.v201609.cm ReportDefinitionServiceInterface]
+           [com.google.api.ads.adwords.lib.utils.v201705 ReportDownloader DetailedReportDownloadResponseException]
+           [com.google.api.ads.adwords.axis.v201705.cm ReportDefinitionServiceInterface]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]
            [java.util.zip GZIPInputStream]))
 
