@@ -1,4 +1,4 @@
-(defproject adworj "0.3.5"
+(defproject adworj "0.4.0"
   :description "Clojure library to ease interacting with the Google AdWords API"
   :url "https://github.com/uswitch/adworj"
   :license {:name "Eclipse Public License"
