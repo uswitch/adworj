@@ -2,8 +2,8 @@
   (:require [adworj.reporting :as r]
             [clj-time.format :as tf]
             [clojure.test :refer :all])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201609 ReportDefinitionDateRangeType]
-           [com.google.api.ads.adwords.lib.jaxb.v201609 ReportDefinitionReportType]))
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201710 ReportDefinitionDateRangeType]
+           [com.google.api.ads.adwords.lib.jaxb.v201710 ReportDefinitionReportType]))
 
 (deftest report-specification-test
   (let [d (r/report-definition r/search-query-performance
