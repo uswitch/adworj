@@ -6,14 +6,14 @@
             [clojure.set :as set]
             [clojure.java.io :as io]
             [clojure.string :as s])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201710 ReportDefinition ReportDefinitionReportType]
-           [com.google.api.ads.adwords.lib.jaxb.v201710 DownloadFormat]
-           [com.google.api.ads.adwords.lib.jaxb.v201710 DateRange Selector ReportDefinitionDateRangeType]
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201802 ReportDefinition ReportDefinitionReportType]
+           [com.google.api.ads.adwords.lib.jaxb.v201802 DownloadFormat]
+           [com.google.api.ads.adwords.lib.jaxb.v201802 DateRange Selector ReportDefinitionDateRangeType]
            [com.google.api.ads.adwords.lib.client AdWordsSession]
            [com.google.api.ads.adwords.lib.client.reporting ReportingConfiguration$Builder]
            [com.google.api.client.auth.oauth2 Credential]
-           [com.google.api.ads.adwords.lib.utils.v201710 ReportDownloader DetailedReportDownloadResponseException]
-           [com.google.api.ads.adwords.axis.v201710.cm ReportDefinitionServiceInterface]
+           [com.google.api.ads.adwords.lib.utils.v201802 ReportDownloader DetailedReportDownloadResponseException]
+           ; [com.google.api.ads.adwords.axis.v201802.cm ReportDefinitionServiceInterface]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]
            [java.util.zip GZIPInputStream]))
 
@@ -168,7 +168,6 @@
   :average-pageviews                      {:name "AveragePageviews" :parse parse-double}
   :average-position                       {:name "AveragePosition" :parse parse-double}
   :average-time-on-site                   {:name "AverageTimeOnSite" :parse parse-double}
-  :bid-type                               "BidType"
   :bidding-strategy-id                    "BiddingStrategyId"
   :bidding-strategy-name                  "BiddingStrategyName"
   :bidding-strategy-type                  "BiddingStrategyType"
@@ -371,7 +370,6 @@
   :average-cpm                                     {:name "AverageCpm" :parse parse-long}
   :average-position                                {:name "AveragePosition" :parse parse-double}
   :bid-modifier                                    "BidModifier"
-  :bid-type                                        "BidType"
   :campaign-id                                     "CampaignId"
   :campaign-name                                   "CampaignName"
   :campaign-status                                 "CampaignStatus"
@@ -435,7 +433,6 @@
   :average-cpc                         "AverageCpc"
   :average-cpm                         "AverageCpm"
   :bid-modifier                        "BidModifier"
-  :bid-type                            "BidType"
   :campaign-id                         "CampaignId"
   :campaign-name                       "CampaignName"
   :campaign-status                     "CampaignStatus"
@@ -486,7 +483,6 @@
   :average-cpm                         {:name "AverageCpm" :parse parse-long}
   :average-position                    {:name "AveragePosition" :parse parse-double}
   :bid-modifier                        "BidModifier"
-  :bid-type                            "BidType"
   :campaign-id                         "CampaignId"
   :campaign-name                       "CampaignName"
   :campaign-status                     "CampaignStatus"
