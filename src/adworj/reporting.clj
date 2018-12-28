@@ -6,14 +6,14 @@
             [clojure.set :as set]
             [clojure.java.io :as io]
             [clojure.string :as s])
-  (:import [com.google.api.ads.adwords.lib.jaxb.v201802 ReportDefinition ReportDefinitionReportType]
-           [com.google.api.ads.adwords.lib.jaxb.v201802 DownloadFormat]
-           [com.google.api.ads.adwords.lib.jaxb.v201802 DateRange Selector ReportDefinitionDateRangeType]
+  (:import [com.google.api.ads.adwords.lib.jaxb.v201806 ReportDefinition ReportDefinitionReportType]
+           [com.google.api.ads.adwords.lib.jaxb.v201806 DownloadFormat]
+           [com.google.api.ads.adwords.lib.jaxb.v201806 DateRange Selector ReportDefinitionDateRangeType]
            [com.google.api.ads.adwords.lib.client AdWordsSession]
            [com.google.api.ads.adwords.lib.client.reporting ReportingConfiguration$Builder]
            [com.google.api.client.auth.oauth2 Credential]
-           [com.google.api.ads.adwords.lib.utils.v201802 ReportDownloader DetailedReportDownloadResponseException]
-           ; [com.google.api.ads.adwords.axis.v201802.cm ReportDefinitionServiceInterface]
+           [com.google.api.ads.adwords.lib.utils.v201806 ReportDownloader DetailedReportDownloadResponseException]
+           ; [com.google.api.ads.adwords.axis.v201806.cm ReportDefinitionServiceInterface]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]
            [java.util.zip GZIPInputStream]))
 
@@ -548,7 +548,6 @@
   :date                                "Date"
   :day-of-week                         "DayOfWeek"
   :device                              "Device"
-  :device-preference                   "DevicePreference"
   :end-time                            "EndTime"
   :external-customer-id                "ExternalCustomerId"
   :feed-id                             "FeedId"
@@ -562,7 +561,6 @@
   :placeholder-type                    "PlaceholderType"
   :primary-company-name                "PrimaryCompanyName"
   :quarter                             "Quarter"
-  :scheduling                          "Scheduling"
   :slot                                "Slot"
   :start-time                          "StartTime"
   :status                              "Status"
