@@ -1,0 +1,16 @@
+pipeline:
+
+  test:
+    when:
+      event: push
+    image: registry.usw.co/uswitch/clojure-leiningen:2.8.1
+    commands:
+      - lein test
+
+  build:
+    when:
+      event: push
+    image: registry.usw.co/uswitch/clojure-leiningen:2.8.1
+    commands:
+      - lein jar
+
