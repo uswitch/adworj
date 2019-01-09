@@ -3,7 +3,7 @@
             [clj-time.format :as tf]
             [clojure.set :as s]
             [clojure.string :as st])
-  (:import [com.google.api.ads.adwords.axis.v201802.cm ApiError RateExceededError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
+  (:import [com.google.api.ads.adwords.axis.v201809.cm ApiError RateExceededError ApiException OfflineConversionFeed OfflineConversionFeedReturnValue OfflineConversionFeedOperation OfflineConversionFeedServiceInterface ConversionTrackerCategory UploadConversion ConversionTrackerOperation ConversionTrackerServiceInterface Operator Selector]
            [com.google.api.ads.adwords.axis.factory AdWordsServices]))
 
 
